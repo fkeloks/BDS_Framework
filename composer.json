@@ -1,0 +1,39 @@
+{
+    "name": "florian/bds_framework",
+    "description": "A simple framework, by Florian B.",
+    "type": "project",
+    "keywords": ["framework", "bds"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "fkeloks",
+            "email": "fkeloks@gmail.com"
+        }
+    ],
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "require": {
+        "php": "^7.0 || ^7.1",
+        "bramus/router": "~1.0",
+        "digitalnature/php-ref": "^1.2",
+        "php-di/php-di": "^5.4",
+        "twig/twig": "~2.0"
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^3.1",
+        "symfony/console": "^3.3"
+    },
+    "scripts": {
+        "test": "kahlan --reporter=verbose --spec=specs"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "BDSCore\\": "core/",
+            "BDSConsole\\": "bin/commands"
+        }
+    }
+}

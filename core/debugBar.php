@@ -1,0 +1,45 @@
+<?php
+
+namespace BDSCore;
+
+/**
+ * Class DebugBar
+ * @package BDSCore
+ */
+class DebugBar
+{
+
+    /**
+     * @param string $key
+     * @param $value
+     */
+    public static function pushElement(string $key, $value) {
+        $_SESSION['debugBarItems'][$key] = $value;
+    }
+
+    /**
+     * @param string|null $file
+     * @return string
+     * @throws \Exception
+     */
+    public static function insertDebugBar(string $file = null): string {
+        if ($file != null) {
+            if (isset($_SESSION['debugBarItems'])) {
+                $elements = $_SESSION['debugBarItems'];
+                $_SESSION['debugBarItems'] = [];
+            } else {
+                throw new \Exception('DebugBarItems is not specified in insertDebugBar\'function');
+            }
+            $elementsHtml = '';
+            foreach ($elements as $el => $e) {
+                $elementsHtml = $elementsHtml . "<span>- <b>$el:</b> $e</span><br>";
+            }
+            $debugBar = '<style>div.openDebugBar{position:fixed;display:block;bottom:45px;left:45px;height:45px;width:45px;border:none;outline:none;border-radius:50%;z-index:9998;background-color:#3B445B;text-align:center;transition:all 300ms}div.openDebugBar .menu-bar{display:block;position:absolute;top:50%;left:50%;transform:translateX(-50%) translateY(-50%);z-index:9999;height:3px;width:25px;background-color:#FFF;border-radius:5px}div.openDebugBar .menu-bar::before,div.openDebugBar .menu-bar::after{display:block;position:absolute;content:\'\';background-color:#FFF;border-radius:5px;height:3px;width:25px;transform:translateY(-7px)}div.openDebugBar .menu-bar::after{transform:translateY(7px)}div.openDebugBar .menu-label{display:block;position:absolute;top:50px;left:-10px;user-select: none;color:#3B445B}div.openDebugBar:hover{background-color:#565f86;cursor:pointer}div.openDebugBar.is-open{background-color:#565f86;transform:translateX(185px)}div.debugBar{position:fixed;z-index:9990;top:0;border-right: 1px solid #FFF;line-height: 150%;bottom:0;left:-275px;height:100%;width:274px;background-color:#3B445B;transition:transform 300ms;color:#FFF;padding-top:20px}div.debugBar a{text-decoration:none;color:inherit}div.debugBar hr{margin-bottom:15px}div.debugBar.is-open{padding:20px;transform:translateX(275px)}</style><div class="openDebugBar"> <span class="menu-label">DebugBar</span> <span class="menu-bar"></span></div><div class="debugBar"> <h3>BDS Framework V1.0</h3> <hr><span id="loadingTime">- <b>LoadingTime: </b></span><br>' . $elementsHtml . '</div><script>var openButton=document.querySelector(\'div.openDebugBar\'); var debugBar=document.querySelector(\'div.debugBar\'); var cookContent=document.cookie, cookEnd, i, j; var sName="BDS_loadingTime="; for (i=0, c=cookContent.length; i<c; i++){j=i + sName.length; if (cookContent.substring(i, j)==sName){cookEnd=cookContent.indexOf(";", j); if (cookEnd==-1){cookEnd=cookContent.length;}var loadingTime=decodeURIComponent(cookContent.substring(j, cookEnd));}}document.getElementById("loadingTime").appendChild(document.createTextNode(loadingTime)); openButton.addEventListener(\'click\', function(e){e.preventDefault(); if(debugBar.classList.contains(\'is-open\')){debugBar.classList.remove(\'is-open\'); openButton.classList.remove(\'is-open\');}else{debugBar.classList.add(\'is-open\'); openButton.classList.add(\'is-open\');}});</script>';
+            $file = preg_replace('/(<body>)/', '${1}' . $debugBar, $file);
+
+            return $file;
+        }
+        throw new \Exception('File path is not specified in insertDebugBar\'function');
+    }
+
+}

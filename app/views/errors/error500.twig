@@ -1,0 +1,21 @@
+{% extends 'globals/default.twig' %}
+
+{% block title %}Internal server error | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <span class="header"></span>
+
+    <div class="block-center">
+        <h1>Error 500 : Internal server error</h1>
+        <span>
+            Unexpected error... <br>
+            An error occurred and your request couldn't be completed. Please try again.
+        </span>
+    </div>
+
+    <footer>
+        <span>BDS Version 1.0 | 2017</span>
+    </footer>
+
+{% endblock %}

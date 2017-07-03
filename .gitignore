@@ -1,4 +1,11 @@
-/bootstrap/compiled.php
 .env.*.php
 .env.php
 .env
+
+*.log
+*.sqlite
+
+/.idea
+*.lock
+
+TODO\.txt
