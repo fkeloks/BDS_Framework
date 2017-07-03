@@ -3,7 +3,7 @@
 BDS Framework, un framework simple d'utilisation.
 Framework développé par Florian B.
 
-##Fonctionnalités
+## Fonctionnalités
 
 - Architecture MVC simple
 - Router complet et simple d'utilisation
