@@ -35,6 +35,14 @@ class BaseController
     }
 
     /**
+     * @param string $routeNameOrUrl
+     */
+    public function redirect(string $routeNameOrUrl) {
+        $url = \BDSCore\Router::getPath($routeNameOrUrl);
+        ($url != '') ? header('Location:' . $url) : header('Location:' . $routeNameOrUrl);
+    }
+
+    /**
      * @return array
      */
     public function getHeaders() {

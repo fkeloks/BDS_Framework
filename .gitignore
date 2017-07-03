@@ -9,3 +9,6 @@
 *.lock
 
 TODO\.txt
+
+
+cache/
