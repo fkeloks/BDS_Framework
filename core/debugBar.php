@@ -13,7 +13,7 @@ class DebugBar
      * @param string $key
      * @param $value
      */
-    public static function pushElement(string $key, $value) {
+    public static function pushElement(string $key, string $value) {
         $_SESSION['debugBarItems'][$key] = $value;
     }
 
