@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore;
+namespace BDSCore\Debug;
 
 /**
  * Class DebugBar
- * @package BDSCore
+ * @package BDSCore\Debug
  */
 class DebugBar
 {
@@ -20,7 +20,7 @@ class DebugBar
     /**
      * @param string|null $file
      * @return string
-     * @throws \Exception
+     * @throws DebugException
      */
     public static function insertDebugBar(string $file = null): string {
         if ($file != null) {
@@ -28,7 +28,7 @@ class DebugBar
                 $elements = $_SESSION['debugBarItems'];
                 $_SESSION['debugBarItems'] = [];
             } else {
-                throw new \Exception('DebugBarItems is not specified in insertDebugBar\'function');
+                throw new \BDSCore\Debug\DebugException('DebugBarItems is not specified in insertDebugBar\'function');
             }
             $elementsHtml = '';
             foreach ($elements as $el => $e) {
@@ -39,7 +39,7 @@ class DebugBar
 
             return $file;
         }
-        throw new \Exception('File path is not specified in insertDebugBar\'function');
+        throw new \BDSCore\Debug\DebugException('File path is not specified in insertDebugBar\'function');
     }
 
 }

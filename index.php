@@ -13,11 +13,11 @@ function catchException($e) {
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 
         if (\BDSCore\Config::getConfig('errorLogger')) {
-            $logger = new \BDSCore\Logger();
+            $logger = new \BDSCore\Debug\Logger();
             $logger->log($e);
         }
 
-        $template = new \BDSCore\Template();
+        $template = new \BDSCore\Twig\Template();
         $template->render('errors/error500.twig');
 
         exit();
@@ -38,7 +38,7 @@ if (isset($_GET['errorCode'])) {
     \BDSCore\Errors::returnError($_GET['errorCode']);
 }
 
-$debugClass = new \BDSCore\Debugger();
+$debugClass = new \BDSCore\Debug\Debugger();
 /**
  * @param $item
  * @return bool
@@ -46,18 +46,18 @@ $debugClass = new \BDSCore\Debugger();
 function debug($item): bool {
     global $debugClass;
     if (is_string($item)) {
-        \BDSCore\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
+        \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
     }
 
     return $debugClass->debug($item);
 }
 
 $config = \BDSCore\Config::getAllConfig();
-\BDSCore\debugBar::pushElement('DebugInFile', ($config['debugFile']) ? 'true' : 'false');
-\BDSCore\debugBar::pushElement('Locale', $config['locale']);
-\BDSCore\debugBar::pushElement('Timezone', $config['timezone']);
+\BDSCore\Debug\debugBar::pushElement('DebugInFile', ($config['debugFile']) ? 'true' : 'false');
+\BDSCore\Debug\debugBar::pushElement('Locale', $config['locale']);
+\BDSCore\Debug\debugBar::pushElement('Timezone', $config['timezone']);
 
-$router = new BDSCore\Router();
+$router = new BDSCore\Router\Router();
 $router->run();
 
 if ($config['debugBar']) {

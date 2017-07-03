@@ -324,11 +324,13 @@ class Router
                     }
                 }, $matches, array_keys($matches));
 
+                // ----- BDS Framework -----
                 try {
-                    \BDSCore\debugBar::pushElement('Controller', str_replace(\BDSCore\Config::getRouterConfig('controllersNamespace') . '\\', '', $route['fn']));
+                    \BDSCore\Debug\debugBar::pushElement('Controller', str_replace(\BDSCore\Config::getRouterConfig('controllersNamespace') . '\\', '', $route['fn']));
                 } catch (\Exception $eeex) {
 
                 }
+                // -------------------------
 
                 // Call the handling function with the URL parameters if the desired input is callable
                 if (is_callable($route['fn'])) {

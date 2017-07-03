@@ -14,7 +14,7 @@ class Errors
      */
     public static function returnError($errorCode = 500) {
         try {
-            $template = new \BDSCore\Template();
+            $template = new \BDSCore\Twig\Template();
             $template->render('errors/error' . $errorCode . '.twig');
         } catch (\Exception $e) {
 

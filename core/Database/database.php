@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore;
+namespace BDSCore\Database;
 
 /**
  * Class Database
- * @package BDSCore
+ * @package BDSCore\Database
  */
 class Database
 {
@@ -30,9 +30,9 @@ class Database
      * @param string $driver
      * @param string $databaseName
      * @return \PDOStatement
-     * @throws \Exception
+     * @throws DatabaseException
      */
-    public function connect(string $driver, string $databaseName): \PDOStatement {
+    public function connect(string $driver, string $databaseName) {
         if ($driver == 'sqlite') {
             $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
         } elseif ($driver == 'mysql') {
@@ -44,7 +44,7 @@ class Database
             ];
             $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);
         } else {
-            throw new \Exception('Use of an unknown driver name in the \BDSCore\Database() class.');
+            throw new \BDSCore\Database\DatabaseException('Use of an unknown driver name in the \BDSCore\Database() class.');
         }
         $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -58,7 +58,7 @@ class Database
      * @param string|null $entity
      * @return \PDOStatement
      */
-    public function query(string $query, array $params = [], string $entity = null): \PDOStatement {
+    public function query(string $query, array $params = [], string $entity = null) {
         if (count($params) === 0) {
             $query = $this->pdo->query($query);
         } else {
@@ -105,7 +105,7 @@ class Database
     /**
      * @return int
      */
-    public function lastInsertId(): ?int {
+    public function lastInsertId(): int {
         return $this->pdo->lastInsertId();
     }
 

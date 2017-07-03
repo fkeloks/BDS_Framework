@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore;
+namespace BDSCore\Debug;
 
 /**
  * Class Logger
- * @package BDSCore
+ * @package BDSCore\Debug
  */
 class Logger
 {

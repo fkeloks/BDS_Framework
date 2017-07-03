@@ -22,7 +22,7 @@ class BaseController
         $containerBuilder->useAutowiring(true);
         $this->container = $containerBuilder->build();
 
-        \BDSCore\DebugBar::pushElement('RequestMethod', $this->getMethod());
+        \BDSCore\Debug\DebugBar::pushElement('RequestMethod', $this->getMethod());
     }
 
     /**
@@ -30,7 +30,7 @@ class BaseController
      * @param array $args
      */
     public function render($path, $args = []) {
-        $template = $this->container->get(\BDSCore\Template::class);
+        $template = $this->container->get(\BDSCore\Twig\Template::class);
         echo $template->render($path, $args);
     }
 
@@ -38,7 +38,7 @@ class BaseController
      * @param string $routeNameOrUrl
      */
     public function redirect(string $routeNameOrUrl) {
-        $url = \BDSCore\Router::getPath($routeNameOrUrl);
+        $url = \BDSCore\Router\Router::getPath($routeNameOrUrl);
         ($url != '') ? header('Location:' . $url) : header('Location:' . $routeNameOrUrl);
     }
 

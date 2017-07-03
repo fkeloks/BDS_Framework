@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore;
+namespace BDSCore\Router;
 
 /**
  * Class Router
- * @package BDSCore
+ * @package BDSCore\Router
  */
 class Router
 {
@@ -32,7 +32,7 @@ class Router
     public function __construct() {
         $this->routerClass = new \Bramus\Router\Router();
         $this->configRouter = include('./config/router.php');
-        $this->templateClass = new \BDSCore\Template();
+        $this->templateClass = new \BDSCore\Twig\Template();
     }
 
     /**
