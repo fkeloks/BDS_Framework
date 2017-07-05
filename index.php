@@ -64,9 +64,6 @@ $config = \BDSCore\Config::getAllConfig();
 \BDSCore\Debug\debugBar::pushElement('Locale', $config['locale']);
 \BDSCore\Debug\debugBar::pushElement('Timezone', $config['timezone']);
 
-$database = new \BDSCore\Database\Database('BDS_Framework', 'mysql');
-$database->select();
-
 $router = new BDSCore\Router\Router();
 $router->run();
 
