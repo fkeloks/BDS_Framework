@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+/**
+ * Class helloController
+ * @package App\Controllers
+ */
 class helloController {
 
     public function index($name) {

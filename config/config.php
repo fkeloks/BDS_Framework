@@ -5,7 +5,7 @@ return [
     'debugFile'      => false,
     'debugBar'       => true,
     'errorLogger'    => false,
-    'showExceptions' => false,
+    'showExceptions' => true,
 
     'timezone' => 'Europe/Paris',
     'locale'   => 'fr',

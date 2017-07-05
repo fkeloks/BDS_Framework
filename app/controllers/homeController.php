@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+/**
+ * Class homeController
+ * @package App\Controllers
+ */
 class homeController extends \BDSCore\BaseController
 {
 
