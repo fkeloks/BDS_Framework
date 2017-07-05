@@ -9,8 +9,13 @@
     <div class="block-center">
         <h1>Error 500 : Internal server error</h1>
         <span>
-            Unexpected error... <br>
-            An error occurred and your request couldn't be completed. Please try again.
+            {% if(exception == false) %}
+                Unexpected error... <br>
+                An error occurred and your request couldn't be completed. Please try again.
+            {% else %}
+                [ {{ className }} ] <br>
+                {{ exception }}
+            {% endif %}
         </span>
     </div>
 

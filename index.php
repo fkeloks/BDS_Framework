@@ -18,7 +18,14 @@ function catchException($e) {
         }
 
         $template = new \BDSCore\Twig\Template();
-        $template->render('errors/error500.twig');
+        if (\BDSCore\Config::getConfig('showExceptions')) {
+            $template->render('errors/error500.twig', [
+                'className' => get_class($e),
+                'exception' => $e->getMessage()
+            ]);
+        } else {
+            $template->render('errors/error500.twig', ['exception' => false]);
+        }
 
         exit();
     } catch (Exception $ex) {
@@ -27,7 +34,6 @@ function catchException($e) {
     }
 }
 
-// TODO: AMELIORER CETTE LIGNE
 set_exception_handler('catchException');
 
 session_start();
@@ -57,6 +63,9 @@ $config = \BDSCore\Config::getAllConfig();
 \BDSCore\Debug\debugBar::pushElement('DebugInFile', ($config['debugFile']) ? 'true' : 'false');
 \BDSCore\Debug\debugBar::pushElement('Locale', $config['locale']);
 \BDSCore\Debug\debugBar::pushElement('Timezone', $config['timezone']);
+
+$database = new \BDSCore\Database\Database('BDS_Framework', 'mysql');
+$database->select();
 
 $router = new BDSCore\Router\Router();
 $router->run();

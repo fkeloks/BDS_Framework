@@ -32,7 +32,7 @@ php_value register_globals OFF
 php_value max_execution_time 3600
 php_value post_max_size 60M
 php_value upload_max_filesize 100M
-php_value display_errors on
+php_value display_errors off
 php_value html_errors off
 php_flag  log_errors on
 php_value error_log /storage/logs/errorsLogs.txt

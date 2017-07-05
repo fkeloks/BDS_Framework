@@ -2,9 +2,10 @@
 
 return [
 
-    'debugFile'   => false,
-    'debugBar'    => true,
-    'errorLogger' => true,
+    'debugFile'      => false,
+    'debugBar'       => true,
+    'errorLogger'    => false,
+    'showExceptions' => false,
 
     'timezone' => 'Europe/Paris',
     'locale'   => 'fr',
