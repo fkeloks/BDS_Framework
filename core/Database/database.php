@@ -20,12 +20,13 @@ class Database
      * @param string|null $driver
      */
     public function __construct(string $databaseName = null, string $driver = null) {
-        if($databaseName == null) {
+        if ($databaseName == null) {
             throw new DatabaseException('The name of the database must be specified');
         }
         if (!is_string($driver)) {
             $driver = \BDSCore\Config::getConfig('db_driver');
         }
+
         return $this->connect($driver, $databaseName);
     }
 
@@ -113,6 +114,52 @@ class Database
      */
     public function lastInsertId(): int {
         return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * @param string|null $tableName
+     * @param $collumns
+     * @param $values
+     * @return \PDOStatement
+     * @throws DatabaseException
+     */
+    public function insert(string $tableName = null, $collumns, $values) {
+        if ($tableName != null && $collumns != null && $values != null) {
+            if (is_string($collumns) && is_string($values)) {
+                return $this->query("INSERT INTO {$tableName} ({$collumns}) VALUES (?)", [$values]);
+            } elseif (is_array($collumns) && is_array($values)) {
+                $collumnsStr = implode(', ', $collumns);
+                $valuesStr = '"' . implode('", "', $values) . '"';
+
+                return $this->query("INSERT INTO {$tableName} ({$collumnsStr}) VALUES ({$valuesStr})");
+            } else {
+                throw new DatabaseException('The type of parameters returned to the insert () function are invalid.');
+            }
+        } else {
+            throw new DatabaseException('The name of the table, the name of a column (s), and the values to be inserted are mandatory parameters to execute the query.');
+        }
+    }
+
+    /**
+     * @param string|null $tableName
+     * @param null $collums
+     * @return array
+     * @throws DatabaseException
+     */
+    public function select(string $tableName = null, $collums = null): array {
+        if ($tableName != null && $collums != null) {
+            if (is_string($collums)) {
+                ($collums == 'all') ? $collums = '*' : null;
+
+                return $this->query("SELECT {$collums} FROM {$tableName}")->fetchAll();
+            } elseif (is_array($collums)) {
+                $collumsStr = implode(', ', $collums);
+
+                return $this->query("SELECT {$collumsStr} FROM {$tableName}")->fetchAll();
+            }
+        } else {
+            throw new DatabaseException('The name of the table and the name of a column (s) to be inserted are mandatory parameters to execute the query.');
+        }
     }
 
 }

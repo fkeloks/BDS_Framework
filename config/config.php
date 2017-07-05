@@ -12,10 +12,10 @@ return [
     'twigViews' => 'app/views',
     'twigCache' => 'cache/twig',
 
-    'db_driver'   => 'sqlite',
-    'db_host'     => null,
-    'db_name'     => null,
-    'db_username' => null,
+    'db_driver'   => 'mysql',
+    'db_host'     => 'localhost',
+    'db_name'     => 'BDS_Framework',
+    'db_username' => 'root',
     'db_password' => null,
 
 ];

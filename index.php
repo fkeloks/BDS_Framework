@@ -27,6 +27,7 @@ function catchException($e) {
     }
 }
 
+// TODO: AMELIORER CETTE LIGNE
 set_exception_handler('catchException');
 
 session_start();
