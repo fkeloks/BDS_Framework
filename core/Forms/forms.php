@@ -41,6 +41,22 @@ class Forms
     }
 
     /**
+     * @param $item
+     * @param $type
+     * @return bool
+     */
+    private function checkType($item, $type): bool {
+        ($type == 'int') ? $type = 'integer' : null;
+        ($type == 'str') ? $type = 'string' : null;
+        ($type == 'bool') ? $type = 'boolean' : null;
+        if (gettype($item) != $type) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * @return bool
      * @throws FormsException
      */
@@ -48,24 +64,45 @@ class Forms
         if (!empty($this->method) && !empty($this->configuration)) {
             ($this->method == 'get' || $this->method == 'GET') ? $method = $_GET : null;
             ($this->method == 'post' || $this->method == 'POST') ? $method = $_POST : null;
+            $i = 0;
             foreach ($this->configuration as $c => $r) {
-                ($c === 0) ? $c = $r : null;
+                if ($c === $i) {
+                    $c = $r;
+                }
                 if (!isset($method[$c])) {
                     return false;
                 } else {
                     if ($c == $r) {
                         $this->results[$c] = $method[$c];
                     } else {
-                        ($r == 'int') ? $r = 'integer' : null;
-                        ($r == 'str') ? $r = 'string' : null;
-                        ($r == 'bool') ? $r = 'boolean' : null;
-                        if (gettype($method[$c]) != $r) {
-                            return false;
-                        } else {
+                        if (is_string($r)) {
+                            if (!$this->checkType($method[$c], $r)) {
+                                return false;
+                            }
                             $this->results[$c] = $method[$c];
+                        } elseif (is_array($r)) {
+                            if (isset($r['type'])) {
+                                if (!$this->checkType($method[$c], $r['type'])) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
+                            if (isset($r['min-length'])) {
+                                if (strlen($method[$c]) < $r['min-length']) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
+                            if (isset($r['max-length'])) {
+                                if (strlen($method[$c]) > $r['max-length']) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
                         }
                     }
                 }
+                $i = $i + 1;
             }
 
             return true;
