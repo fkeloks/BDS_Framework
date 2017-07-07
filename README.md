@@ -26,6 +26,11 @@ Un .htaccess est intégré à la racine du framework, si vous utilisez Nginx vou
 3- Si vous utilisez Nginx, vous devez adapter votre configuration à partir du fichier .htaccess situé à la racine du projet  
 4- Profitez ! Il ne vous reste plus qu'a développer votre site dans le dossier app/, le framework s'occupe de tout !  
 
+## Documentation
+
+Une documentation est disponible à cette adresse : https://github.com/fkeloks/BDS_Framework/wiki  
+La rédaction de celle-ci n'est cependant pas terminée.
+
 ## License
 
 (FR) BDS Framework est maintenu sous la licence MIT, les termes de la licence sont inscrits dans le fichier LICENCE.  
