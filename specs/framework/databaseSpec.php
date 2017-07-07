@@ -10,9 +10,6 @@ describe('Database', function () {
             return new \BDSCore\Database\Database('databaseTest', 'd');
         })->toThrow(new \BDSCore\Database\DatabaseException);
         expect(new \BDSCore\Database\Database('databaseTest', 'sqlite'))->toBeAnInstanceOf('BDSCore\Database\Database');
-        expect(function () {
-            new \BDSCore\Database\Database('databaseTest', 'mysql');
-        })->toThrow(new \BDSCore\Database\DatabaseException);
     });
 
     it('Test sending data to a sqlite database.', function () {
