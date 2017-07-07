@@ -16,12 +16,13 @@ class Database
 
     /**
      * Database constructor.
-     * @param string $databaseName
      * @param string|null $driver
+     * @param string|null $databaseName
+     * @throws DatabaseException
      */
-    public function __construct(string $databaseName = null, string $driver = null) {
-        if ($databaseName == null) {
-            throw new DatabaseException('The name of the database must be specified');
+    public function __construct(string $driver = null, string $databaseName = null) {
+        if ($driver == null && $databaseName == null) {
+            throw new DatabaseException('The two parameters of the functions can not both be null');
         }
         if (!is_string($driver)) {
             $driver = \BDSCore\Config::getConfig('db_driver');
@@ -31,13 +32,16 @@ class Database
     }
 
     /**
-     * @param string $driver
-     * @param string $databaseName
-     * @return \PDOStatement
+     * @param $driver
+     * @param $databaseName
+     * @return \PDO
      * @throws DatabaseException
      */
-    public function connect(string $driver, string $databaseName) {
+    public function connect($driver, $databaseName) {
         if ($driver == 'sqlite') {
+            if ($databaseName == null) {
+                throw new DatabaseException('The name of the database must be specified');
+            }
             $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
         } elseif ($driver == 'mysql') {
             $params = [
