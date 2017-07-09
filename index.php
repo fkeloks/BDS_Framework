@@ -12,13 +12,13 @@ function catchException($e) {
 
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 
-        if (\BDSCore\Config::getConfig('errorLogger')) {
+        if (\BDSCore\Config\Config::getConfig('errorLogger')) {
             $logger = new \BDSCore\Debug\Logger();
             $logger->log($e);
         }
 
         $template = new \BDSCore\Twig\Template();
-        if (\BDSCore\Config::getConfig('showExceptions')) {
+        if (\BDSCore\Config\Config::getConfig('showExceptions')) {
             $template->render('errors/error500.twig', [
                 'className' => get_class($e),
                 'exception' => $e->getMessage()
@@ -36,10 +36,14 @@ function catchException($e) {
 
 set_exception_handler('catchException');
 
+require('vendor/autoload.php');
+
+$securityConfig = \BDSCore\Config\Config::getAllSecurityConfig();
+
+ini_set('session.cookie_lifetime', $securityConfig['sessionLifetime']);
+session_name('BDS_SESSION');
 session_start();
 $_SESSION['config'] = include('config/config.php');
-
-require('vendor/autoload.php');
 
 if (isset($_GET['errorCode'])) {
     \BDSCore\Errors::returnError($_GET['errorCode']);
@@ -59,12 +63,33 @@ function debug($item): bool {
     return $debugClass->debug($item);
 }
 
-$config = \BDSCore\Config::getAllConfig();
+if ($securityConfig['checkPermissions']) {
+    $security = new \BDSCore\Security\Security($securityConfig['ipBan']);
+    $security->checkPermissions();
+}
+
+$config = \BDSCore\Config\Config::getAllConfig();
 \BDSCore\Debug\debugBar::pushElement('DebugInFile', ($config['debugFile']) ? 'true' : 'false');
 \BDSCore\Debug\debugBar::pushElement('Locale', $config['locale']);
 \BDSCore\Debug\debugBar::pushElement('Timezone', $config['timezone']);
 
 $router = new BDSCore\Router\Router();
+
+(!isset($_SESSION['auth'])) ? $_SESSION['auth'] = false : null;
+if ($securityConfig['authRequired']) {
+    if ($_SESSION['auth'] !== true) {
+        $router->activateLogin($securityConfig['authPage']);
+        if ($config['debugBar']) {
+            $timeStop = microtime(true);
+            setcookie('BDS_loadingTime', '~' . round(($timeStop - $timeStart), 3) * 1000 . 'ms', time() + 15);
+        }
+        if ($_SERVER['REQUEST_URI'] !== '/login') {
+            header('Location: login');
+            exit();
+        }
+    }
+}
+
 $router->run();
 
 if ($config['debugBar']) {

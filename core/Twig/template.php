@@ -2,7 +2,7 @@
 
 namespace BDSCore\Twig;
 
-use \BDSCore\Config;
+use \BDSCore\Config\Config;
 use \BDSCore\Router\Router;
 use \BDSCore\Debug\DebugBar;
 
@@ -22,7 +22,7 @@ class Template
      * Template constructor.
      */
     function __construct() {
-        $loader = new \Twig_Loader_Filesystem(\BDSCore\Config::getConfig('twigViews'));
+        $loader = new \Twig_Loader_Filesystem(Config::getConfig('twigViews'));
         $twig = new \Twig_Environment($loader, [
             'cache' => Config::getConfig('twigCache'),
         ]);

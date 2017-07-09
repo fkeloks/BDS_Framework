@@ -17,7 +17,7 @@ class Errors
             $template = new \BDSCore\Twig\Template();
             $template->render('errors/error' . $errorCode . '.twig');
         } catch (\Exception $e) {
-
+            die('-[ Not allowed -]');
         }
         exit();
     }

@@ -139,7 +139,7 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'BDSConsole\\ClearLogs' => __DIR__ . '/../..' . '/bin/commands/ClearLogs.php',
         'BDSConsole\\StartServer' => __DIR__ . '/../..' . '/bin/commands/StartServer.php',
         'BDSCore\\BaseController' => __DIR__ . '/../..' . '/core/baseController.php',
-        'BDSCore\\Config' => __DIR__ . '/../..' . '/core/config.php',
+        'BDSCore\\Config' => __DIR__ . '/../..',
         'BDSCore\\Database\\Database' => __DIR__ . '/../..' . '/core/Database/database.php',
         'BDSCore\\Debug\\DebugBar' => __DIR__ . '/../..' . '/core/Debug/debugBar.php',
         'BDSCore\\Debug\\Debugger' => __DIR__ . '/../..' . '/core/Debug/debugger.php',

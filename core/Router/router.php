@@ -69,9 +69,30 @@ class Router
     }
 
     /**
+     * @param string $authPage
+     */
+    public function activateLogin(string $authPage) {
+        $this->routerClass->get('/login', function () use ($authPage) {
+            \BDSCore\Security\Login::renderLogin($authPage);
+        });
+        $this->routerClass->post('/login', function () {
+            \BDSCore\Security\Login::checkForm();
+        });
+    }
+
+    /**
      * @return bool
      */
     public function run(): bool {
+        if (\BDSCore\Config\Config::getSecurityConfig('authRequired')) {
+            $this->setPath('login', '/login');
+            $this->setPath('logout', '/logout');
+            $this->routerClass->get('/logout', function () {
+                $_SESSION['auth'] = false;
+                header('Location: /');
+            });
+        }
+
         foreach ($this->configRouter['routes'] as $route => $c) {
             $this->setPath($route, $c[1]);
             call_user_func([$this->routerClass, $c[0]], $c[1], $this->configRouter['routerConfig']['controllersNamespace'] . '\\' . $c[2]);

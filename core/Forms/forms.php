@@ -99,6 +99,24 @@ class Forms
                                 }
                                 $this->results[$c] = $method[$c];
                             }
+                            if (isset($r['value'])) {
+                                if ($method[$c] !== $r['value']) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
+                            if (isset($r['keyIncludedIn'])) {
+                                if (!array_key_exists($method[$c], $r['keyIncludedIn'])) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
+                            if (isset($r['ValueIncludedIn'])) {
+                                if (!in_array($method[$c], $r['ValueIncludedIn'])) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
                         }
                     }
                 }

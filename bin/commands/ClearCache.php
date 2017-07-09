@@ -38,7 +38,7 @@ class ClearCache extends Command
             return true;
         }
 
-        $file = clear_dir(\BDSCore\Config::getConfig('twigCache'));
+        $file = clear_dir(\BDSCore\Config\Config::getConfig('twigCache'));
 
         if(!$file) {
             $output->writeln([

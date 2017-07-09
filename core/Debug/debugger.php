@@ -26,9 +26,9 @@ class Debugger
             echo('</pre>');
         }
 
-        if (\BDSCore\Config::getConfig('debugFile')) {
-            date_default_timezone_set(\BDSCore\Config::getConfig('timezone'));
-            setlocale(LC_TIME, \BDSCore\Config::getConfig('locale'));
+        if (\BDSCore\Config\Config::getConfig('debugFile')) {
+            date_default_timezone_set(\BDSCore\Config\Config::getConfig('timezone'));
+            setlocale(LC_TIME, \BDSCore\Config\Config::getConfig('locale'));
             $date = strftime('%A %d %B %Y, %H:%M:%S');
 
             if (is_string($item) || is_array($item) || is_bool($item)) {

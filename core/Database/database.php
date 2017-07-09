@@ -25,7 +25,7 @@ class Database
             throw new DatabaseException('The two parameters of the functions can not both be null');
         }
         if (!is_string($driver)) {
-            $driver = \BDSCore\Config::getConfig('db_driver');
+            $driver = \BDSCore\Config\Config::getConfig('db_driver');
         }
 
         return $this->connect($driver, $databaseName);
@@ -45,10 +45,10 @@ class Database
             $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
         } elseif ($driver == 'mysql') {
             $params = [
-                'host'     => \BDSCore\Config::getConfig('db_host'),
-                'name'     => \BDSCore\Config::getConfig('db_name'),
-                'username' => \BDSCore\Config::getConfig('db_username'),
-                'password' => \BDSCore\Config::getConfig('db_password')
+                'host'     => \BDSCore\Config\Config::getConfig('db_host'),
+                'name'     => \BDSCore\Config\Config::getConfig('db_name'),
+                'username' => \BDSCore\Config\Config::getConfig('db_username'),
+                'password' => \BDSCore\Config\Config::getConfig('db_password')
             ];
             try {
                 $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);

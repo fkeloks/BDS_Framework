@@ -20,8 +20,8 @@ class Logger
      */
     public function log($str): bool {
 
-        date_default_timezone_set(\BDSCore\Config::getConfig('timezone'));
-        setlocale(LC_TIME, \BDSCore\Config::getConfig('locale'));
+        date_default_timezone_set(\BDSCore\Config\Config::getConfig('timezone'));
+        setlocale(LC_TIME, \BDSCore\Config\Config::getConfig('locale'));
 
         $date = strftime('%A %d %B %Y, %H:%M:%S');
 
