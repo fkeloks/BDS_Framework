@@ -5,7 +5,7 @@ describe('Config', function () {
     it('Config File Recovery Test', function () {
         $config = \BDSCore\Config\Config::getAllConfig();
         expect($config)->toBeA('array');
-        expect(count($config))->toBe(13);
+        expect(count($config))->toBe(14);
     });
 
     it('Test for recovery of a configuration item', function () {

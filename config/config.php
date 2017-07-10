@@ -4,6 +4,7 @@ return [
 
     'debugFile'      => false,
     'debugBar'       => true,
+    'showDebug'      => false,
     'errorLogger'    => false,
     'showExceptions' => true,
 

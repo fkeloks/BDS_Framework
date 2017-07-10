@@ -20,10 +20,12 @@ class Debugger
      */
     public function debug($item): bool {
 
-        if (!is_string($item)) {
-            echo('<pre>');
-            var_dump($item);
-            echo('</pre>');
+        if (\BDSCore\Config\Config::getConfig('showDebug')) {
+            if (!is_string($item)) {
+                echo('<pre>');
+                var_dump($item);
+                echo('</pre>');
+            }
         }
 
         if (\BDSCore\Config\Config::getConfig('debugFile')) {

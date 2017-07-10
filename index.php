@@ -49,16 +49,13 @@ if (isset($_GET['errorCode'])) {
     \BDSCore\Errors::returnError($_GET['errorCode']);
 }
 
-$debugClass = new \BDSCore\Debug\Debugger();
 /**
  * @param $item
  * @return bool
  */
 function debug($item): bool {
-    global $debugClass;
-    if (is_string($item)) {
-        \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
-    }
+    $debugClass = new \BDSCore\Debug\Debugger();
+    \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
 
     return $debugClass->debug($item);
 }
