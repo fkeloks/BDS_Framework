@@ -111,8 +111,8 @@ class Forms
                                 }
                                 $this->results[$c] = $method[$c];
                             }
-                            if (isset($r['ValueIncludedIn'])) {
-                                if (!in_array($method[$c], $r['ValueIncludedIn'])) {
+                            if (isset($r['valueIncludedIn'])) {
+                                if (!in_array($method[$c], $r['valueIncludedIn'])) {
                                     return false;
                                 }
                                 $this->results[$c] = $method[$c];

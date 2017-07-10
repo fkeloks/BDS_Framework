@@ -25,7 +25,7 @@ class Login
                 'keyIncludedIn' => $authAccounts
             ],
             'password' => [
-                'ValueIncludedIn' => $authAccounts
+                'valueIncludedIn' => $authAccounts
             ]
         ]);
         if ($form->validate()) {
