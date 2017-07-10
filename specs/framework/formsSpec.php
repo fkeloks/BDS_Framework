@@ -28,6 +28,14 @@ describe('Forms', function () {
                 ]
             ]);
         })->not->toThrow();
+        // --------------------------------------
+        $form = new \BDSCore\Forms\Forms('get', [
+            'name'    => 'str',
+            'comment' => [
+                'randomValue' => 'randomVamlue'
+            ]
+        ]);
+        expect($form->validate())->toThrow();
     });
 
     it('Testing the Forms Class: Checking the Values of a Form', function () {

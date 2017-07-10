@@ -117,6 +117,17 @@ class Forms
                                 }
                                 $this->results[$c] = $method[$c];
                             }
+                            $changes = array_diff(array_keys($r), [
+                                'type',
+                                'min-length',
+                                'max-length',
+                                'value',
+                                'keyIncludedIn',
+                                'valueIncludedIn'
+                            ]);
+                            if (!empty($changes)) {
+                                throw new FormsException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
+                            }
                         }
                     }
                 }
