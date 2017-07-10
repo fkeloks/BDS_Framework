@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore;
+namespace BDSCore\Errors;
 
 /**
  * Class Errors
- * @package BDSCore
+ * @package BDSCore\Errors
  */
 class Errors
 {

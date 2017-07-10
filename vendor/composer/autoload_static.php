@@ -144,7 +144,7 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'BDSCore\\Debug\\DebugBar' => __DIR__ . '/../..' . '/core/Debug/debugBar.php',
         'BDSCore\\Debug\\Debugger' => __DIR__ . '/../..' . '/core/Debug/debugger.php',
         'BDSCore\\Debug\\Logger' => __DIR__ . '/../..' . '/core/Debug/logger.php',
-        'BDSCore\\Errors' => __DIR__ . '/../..' . '/core/errors.php',
+        'BDSCore\\Errors' => __DIR__ . '/../..',
         'BDSCore\\Router\\Router' => __DIR__ . '/../..' . '/core/Router/router.php',
         'BDSCore\\Twig\\Template' => __DIR__ . '/../..' . '/core/Twig/template.php',
         'Bramus\\Router\\Router' => __DIR__ . '/..' . '/bramus/router/src/Bramus/Router/Router.php',

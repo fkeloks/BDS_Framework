@@ -46,7 +46,7 @@ session_start();
 $_SESSION['config'] = include('config/config.php');
 
 if (isset($_GET['errorCode'])) {
-    \BDSCore\Errors::returnError($_GET['errorCode']);
+    \BDSCore\Errors\Errors::returnError($_GET['errorCode']);
 }
 
 /**
