@@ -7,7 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
-    'bbf73f3db644d3dced353b837903e74c' => $vendorDir . '/php-di/php-di/src/DI/functions.php',
-    '7cca0da9604df282f16d129f538c9833' => $vendorDir . '/digitalnature/php-ref/ref.php',
     '337663d83d8353cc8c7847676b3b0937' => $vendorDir . '/kahlan/kahlan/src/functions.php',
 );

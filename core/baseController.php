@@ -10,17 +10,20 @@ class BaseController
 {
 
     /**
-     * @var \DI\Container
+     * @var Twig\Template
      */
-    private $container;
+    private $templateClass;
+    /**
+     * @var \Bramus\Router\Router
+     */
+    private $routerClass;
 
     /**
      * BaseController constructor.
      */
     public function __construct() {
-        $containerBuilder = new \DI\ContainerBuilder();
-        $containerBuilder->useAutowiring(true);
-        $this->container = $containerBuilder->build();
+        $this->templateClass = new \BDSCore\Twig\Template();
+        $this->routerClass = new \Bramus\Router\Router();
 
         \BDSCore\Debug\DebugBar::pushElement('RequestMethod', $this->getMethod());
     }
@@ -30,7 +33,7 @@ class BaseController
      * @param array $args
      */
     public function render($path, $args = []) {
-        $template = $this->container->get(\BDSCore\Twig\Template::class);
+        $template = new $this->templateClass;
         echo $template->render($path, $args);
     }
 
@@ -46,7 +49,7 @@ class BaseController
      * @return array
      */
     public function getHeaders() {
-        $router = $this->container->get(\Bramus\Router\Router::class);
+        $router = $this->routerClass;
 
         return $router->getRequestHeaders();
     }
@@ -55,7 +58,7 @@ class BaseController
      * @return string
      */
     public function getMethod() {
-        $router = $this->container->get(\Bramus\Router\Router::class);
+        $router = $this->routerClass;
 
         return $router->getRequestMethod();
     }
