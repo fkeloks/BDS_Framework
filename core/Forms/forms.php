@@ -117,12 +117,21 @@ class Forms
                                 }
                                 $this->results[$c] = $method[$c];
                             }
+                            if (isset($r['filter'])) {
+                                ($r['filter'] == 'email') ? $r['filter'] = FILTER_VALIDATE_EMAIL : null;
+                                ($r['filter'] == 'url') ? $r['filter'] = FILTER_VALIDATE_URL : null;
+                                if (!filter_var($method[$c], $r['filter'])) {
+                                    return false;
+                                }
+                                $this->results[$c] = $method[$c];
+                            }
                             $changes = array_diff(array_keys($r), [
                                 'type',
                                 'min-length',
                                 'max-length',
                                 'value',
                                 'keyIncludedIn',
+                                'filter',
                                 'valueIncludedIn'
                             ]);
                             if (!empty($changes)) {
