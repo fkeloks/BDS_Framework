@@ -1,5 +1,4 @@
 <?php
-
 namespace BDSCore\Database;
 
 /**
@@ -43,15 +42,25 @@ class Database
                 throw new DatabaseException('The name of the database must be specified');
             }
             $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
-        } elseif ($driver == 'mysql') {
+        } elseif ($driver == 'mysql' or $driver == 'postgresql') {
             $params = [
-                'host'     => \BDSCore\Config\Config::getConfig('db_host'),
-                'name'     => \BDSCore\Config\Config::getConfig('db_name'),
+                'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
+                'database' => \BDSCore\Config\Config::getConfig('db_name'),
                 'username' => \BDSCore\Config\Config::getConfig('db_username'),
                 'password' => \BDSCore\Config\Config::getConfig('db_password')
             ];
+
             try {
-                $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);
+                switch ($driver)
+                {
+                case 'mysql':
+                    $this->pdo = new \PDO("mysql:host={$params['hostname']};dbname={$params['database']};charset=UTF8", $params['username'], $params['password']);
+                    break;
+
+                case 'postgresql':
+                    $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
+                    break;
+                }
             } catch (\Exception $e) {
                 throw new DatabaseException($e->getMessage());
             }
@@ -108,6 +117,7 @@ class Database
      * @param string $query
      * @param array $params
      * @param string|null $entity
+     * @return string
      */
     public function fetchColumn(string $query, array $params = [], string $entity = null) {
         return $this->query($query, $params, $entity)->fetchColumn();

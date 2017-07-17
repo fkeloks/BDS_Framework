@@ -10,8 +10,5 @@
 
 TODO\.txt
 
-
+_tmp
 cache/twig/
-
-
-storage/logs/
