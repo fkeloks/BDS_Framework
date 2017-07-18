@@ -32,7 +32,7 @@ class DebugBar
             }
             $elementsHtml = '';
             foreach ($elements as $el => $e) {
-                (is_array($e) || is_bool($e)) ? $e = var_export($e, true) : null;
+                (is_array($e) || is_bool($e) || is_int($e)) ? $e = var_export($e, true) : null;
                 if(!is_string($e)) {
                     throw new DebugException('Invalid variable type for the insertElement() function.');
                 }

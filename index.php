@@ -8,6 +8,17 @@ $timeStart = microtime(true);
  */
 function catchException($e) {
     try {
+        $permsCode = substr(sprintf('%o', fileperms('cache/')), -4);
+        if ($permsCode != '0777') {
+            die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
+        }
+
+        $phpMajorVersion = (int) PHP_MAJOR_VERSION;
+        if($phpMajorVersion < 7) {
+            $phpVersion = $phpMajorVersion . '.' . PHP_MINOR_VERSION;
+            die("To work properly, BDS Framework needs at least PHP version 7.0.<br />Current version of PHP: {$phpVersion}");
+        }
+
         require_once('vendor/autoload.php');
 
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
