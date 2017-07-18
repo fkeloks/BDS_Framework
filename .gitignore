@@ -2,16 +2,10 @@
 .env.php
 .env
 
-*.log
-*.sqlite
-
 /.idea
 *.lock
 
 TODO\.txt
 
-
-cache/twig/
-
-
-storage/logs/
+cache/twig
+storage/logs/*

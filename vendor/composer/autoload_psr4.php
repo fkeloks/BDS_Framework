@@ -11,6 +11,7 @@ return array(
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Kahlan\\' => array($vendorDir . '/kahlan/kahlan/src'),
     'BDSCore\\' => array($baseDir . '/core'),
     'BDSConsole\\' => array($baseDir . '/bin/commands'),

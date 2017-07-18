@@ -13,7 +13,7 @@ function catchException($e) {
             die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
         }
 
-        $phpMajorVersion = (int) PHP_MAJOR_VERSION;
+        $phpMajorVersion = PHP_MAJOR_VERSION;
         if($phpMajorVersion < 7) {
             $phpVersion = $phpMajorVersion . '.' . PHP_MINOR_VERSION;
             die("To work properly, BDS Framework needs at least PHP version 7.0.<br />Current version of PHP: {$phpVersion}");
@@ -24,8 +24,10 @@ function catchException($e) {
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 
         if (\BDSCore\Config\Config::getConfig('errorLogger')) {
-            $logger = new \BDSCore\Debug\Logger();
-            $logger->log($e);
+            $logger = new \Monolog\Logger('BDS_Framework');
+            $logger->pushHandler(new \Monolog\Handler\StreamHandler('storage/logs/frameworkLogs.log', \Monolog\Logger::WARNING));
+
+            $logger->warning($e);
         }
 
         $template = new \BDSCore\Twig\Template();
