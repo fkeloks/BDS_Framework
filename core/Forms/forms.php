@@ -13,10 +13,11 @@ class Forms
      * @var string
      */
     private $method;
+
     /**
      * @var array
      */
-    private $configuration;
+    private $configuration = [];
 
     /**
      * @var array
@@ -26,26 +27,34 @@ class Forms
     /**
      * Forms constructor.
      * @param string|null $method
-     * @param array|null $configuration
      * @throws FormsException
      */
-    public function __construct(string $method = null, array $configuration = null) {
-        if ($method != null && $configuration != null) {
+    public function __construct(string $method = null) {
+        if ($method != null) {
             $this->method = $method;
-            $this->configuration = $configuration;
-
-            return true;
         } else {
             throw new FormsException('The method and the configuration must be specified as a parameter of the constructor of the Forms() class.');
         }
     }
 
     /**
-     * @param $item
-     * @param $type
+     * @param array|null $configuration
+     * @throws FormsException
+     */
+    public function configure(array $configuration = null) {
+        if ($configuration != null) {
+            $this->configuration = $configuration;
+        } else {
+            throw new FormsException('The configuration was not specified');
+        }
+    }
+
+    /**
+     * @param string $item
+     * @param string $type
      * @return bool
      */
-    private function checkType($item, $type): bool {
+    private function checkType(string $item, string $type): bool {
         ($type == 'int') ? $type = 'integer' : null;
         ($type == 'str') ? $type = 'string' : null;
         ($type == 'bool') ? $type = 'boolean' : null;
@@ -54,6 +63,28 @@ class Forms
         } else {
             return true;
         }
+    }
+
+    /**
+     * @param string $element
+     * @param array $method
+     * @param string $item
+     * @param array $configuration
+     * @return bool
+     */
+    private function checkLength(string $element, array $method, string $item, array $configuration): bool {
+        if (isset($configuration['min-length'])) {
+            if (strlen($method[$element]) < $configuration['min-length']) {
+                return false;
+            }
+        }
+        if (isset($configuration['max-length'])) {
+            if (strlen($method[$element]) > $configuration['max-length']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -87,14 +118,8 @@ class Forms
                                 }
                                 $this->results[$c] = $method[$c];
                             }
-                            if (isset($r['min-length'])) {
-                                if (strlen($method[$c]) < $r['min-length']) {
-                                    return false;
-                                }
-                                $this->results[$c] = $method[$c];
-                            }
-                            if (isset($r['max-length'])) {
-                                if (strlen($method[$c]) > $r['max-length']) {
+                            if (isset($r['min-length']) || isset($r['max-length'])) {
+                                if (!$this->checkLength($c, $method, $method[$c], $r)) {
                                     return false;
                                 }
                                 $this->results[$c] = $method[$c];
@@ -107,12 +132,6 @@ class Forms
                             }
                             if (isset($r['keyIncludedIn'])) {
                                 if (!array_key_exists($method[$c], $r['keyIncludedIn'])) {
-                                    return false;
-                                }
-                                $this->results[$c] = $method[$c];
-                            }
-                            if (isset($r['valueIncludedIn'])) {
-                                if (!in_array($method[$c], $r['valueIncludedIn'])) {
                                     return false;
                                 }
                                 $this->results[$c] = $method[$c];
@@ -132,7 +151,6 @@ class Forms
                                 'value',
                                 'keyIncludedIn',
                                 'filter',
-                                'valueIncludedIn'
                             ]);
                             if (!empty($changes)) {
                                 throw new FormsException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
@@ -145,7 +163,9 @@ class Forms
 
             return true;
         } else {
-            throw new FormsException('The validate () function fails to retrieve the class information.');
+            throw new FormsException('The validate() function does not seem to be able to retrieve the configuration or method from the form.');
+
+            return false;
         }
     }
 

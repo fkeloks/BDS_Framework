@@ -20,17 +20,18 @@ class Login
 
     public function checkForm() {
         $authAccounts = \BDSCore\Config\Config::getSecurityConfig('authAccounts');
-        $form = new \BDSCore\Forms\Forms('post', [
+        $form = new \BDSCore\Forms\Forms('post');
+        $form->configure([
             'username' => [
                 'keyIncludedIn' => $authAccounts
             ],
             'password' => [
-                'valueIncludedIn' => $authAccounts
+                'min-length' => 3
             ]
         ]);
         if ($form->validate()) {
             $results = $form->getResults();
-            if ($authAccounts[$results['username']] == $results['password']) {
+            if ((string) $authAccounts[$results['username']] == (string) $results['password']) {
                 $_SESSION['auth'] = true;
                 header('Location: /');
             } else {
