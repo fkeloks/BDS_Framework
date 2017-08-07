@@ -9,19 +9,20 @@ namespace BDSCore\Security;
 class Security
 {
 
+
     /**
      * @var array
      */
     private $ipBan = [];
 
-    public function __construct(array $ipBan = []) {
-        $this->ipBan = $ipBan;
+    public function __construct() {
+        $this->ipBan = \BDSCore\Config\Config::getSecurityConfig('ipBan');
     }
 
     /**
      * @return bool
      */
-    public function checkIp() {
+    public function checkIp(): bool {
         if (in_array($_SERVER['REMOTE_ADDR'], $this->ipBan)) {
             return true;
         }
@@ -41,9 +42,9 @@ class Security
     }
 
     /**
-     * @param $errorCode
+     * @param int $errorCode
      */
-    private function returnError($errorCode) {
+    private function returnError(int $errorCode) {
         try {
             \BDSCore\Errors::returnError($errorCode);
         } catch (\Exception $e) {
