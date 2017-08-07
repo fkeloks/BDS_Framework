@@ -8,7 +8,6 @@ return [
     'authPage'     => 'login.twig',
     'authAccounts' => [],
 
-    'checkPermissions' => true,
-    'ipBan'            => []
+    'checkPermissions' => false
 
 ];

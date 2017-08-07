@@ -120,7 +120,7 @@ class App
     }
 
     public function pushToDebugBar() {
-        \BDSCore\Debug\debugBar::pushElement('DebugInFile', ($this->globalConfig['debugFile']) ? 'true' : 'false');
+        \BDSCore\Debug\debugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
         \BDSCore\Debug\debugBar::pushElement('Locale', $this->globalConfig['locale']);
         \BDSCore\Debug\debugBar::pushElement('Timezone', $this->globalConfig['timezone']);
     }

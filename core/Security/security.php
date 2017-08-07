@@ -9,35 +9,42 @@ namespace BDSCore\Security;
 class Security
 {
 
-
     /**
-     * @var array
-     */
-    private $ipBan = [];
-
-    public function __construct() {
-        $this->ipBan = \BDSCore\Config\Config::getSecurityConfig('ipBan');
-    }
-
-    /**
+     * @param string|null $ip
      * @return bool
      */
-    public function checkIp(): bool {
-        if (in_array($_SERVER['REMOTE_ADDR'], $this->ipBan)) {
+    public function checkIp(string $ip = null): bool {
+        $ip = (!is_null($ip)) ? $ip : $_SERVER['REMOTE_ADDR'];
+        $ipBan = json_decode(file_get_contents('./storage/framework/IPBanners.json'));
+        if (in_array($ip, $ipBan)) {
             return true;
         }
 
         return false;
     }
 
-    public function banIp() {
-        array_push($this->ipBan, $_SERVER['REMOTE_ADDR']);
+    /**
+     * @param string $ip
+     */
+    public function banIp(string $ip = null) {
+        $ip = (!is_null($ip)) ? $ip : $_SERVER['REMOTE_ADDR'];
+        $ipBan = json_decode(file_get_contents('./storage/framework/IPBanners.json'));
+        if (!in_array($ip, $ipBan)) {
+            array_push($ipBan, $ip);
+        }
+        file_put_contents('./storage/framework/IPBanners.json', json_encode($ipBan));
     }
 
-    public function allowIp() {
-        $key = array_search($_SERVER['REMOTE_ADDR'], $this->ipBan);
+    /**
+     * @param string|null $ip
+     */
+    public function allowIp(string $ip = null) {
+        $ip = (!is_null($ip)) ? $ip : $_SERVER['REMOTE_ADDR'];
+        $ipBan = json_decode(file_get_contents('./storage/framework/IPBanners.json'));
+        $key = array_search($ip, $ipBan);
         if ($key !== false) {
-            unset($this->ipBan[$key]);
+            unset($ipBan[$key]);
+            file_put_contents('./storage/framework/IPBanners.json', json_encode($ipBan));
         }
     }
 
@@ -46,7 +53,7 @@ class Security
      */
     private function returnError(int $errorCode) {
         try {
-            \BDSCore\Errors::returnError($errorCode);
+            \BDSCore\Errors\Errors::returnError($errorCode);
         } catch (\Exception $e) {
             die('-[ Not allowed -]');
         }

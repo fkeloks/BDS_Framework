@@ -88,18 +88,33 @@ class Forms
     }
 
     /**
+     * @param string $method
+     * @return string
+     * @throws FormsException
+     */
+    private function convertAndGetMethod(string $method) {
+        $method = strtolower($method);
+        if ($this->method == 'get') {
+            $method = $_GET;
+        } elseif ($this->method == 'post') {
+            $method = $_POST;
+        } else {
+            throw new FormsException('The form method is invalid or unsupported.');
+        }
+
+        return $method;
+    }
+
+    /**
      * @return bool
      * @throws FormsException
      */
     public function validate(): bool {
         if (!empty($this->method) && !empty($this->configuration)) {
-            ($this->method == 'get' || $this->method == 'GET') ? $method = $_GET : null;
-            ($this->method == 'post' || $this->method == 'POST') ? $method = $_POST : null;
+            $method = $this->convertAndGetMethod($this->method);
             $i = 0;
             foreach ($this->configuration as $c => $r) {
-                if ($c === $i) {
-                    $c = $r;
-                }
+                ($c === $i) ? $c = $r : null;
                 if (!isset($method[$c])) {
                     return false;
                 } else {
@@ -116,25 +131,21 @@ class Forms
                                 if (!$this->checkType($method[$c], $r['type'])) {
                                     return false;
                                 }
-                                $this->results[$c] = $method[$c];
                             }
                             if (isset($r['min-length']) || isset($r['max-length'])) {
                                 if (!$this->checkLength($c, $method, $method[$c], $r)) {
                                     return false;
                                 }
-                                $this->results[$c] = $method[$c];
                             }
                             if (isset($r['value'])) {
                                 if ($method[$c] !== $r['value']) {
                                     return false;
                                 }
-                                $this->results[$c] = $method[$c];
                             }
                             if (isset($r['keyIncludedIn'])) {
                                 if (!array_key_exists($method[$c], $r['keyIncludedIn'])) {
                                     return false;
                                 }
-                                $this->results[$c] = $method[$c];
                             }
                             if (isset($r['filter'])) {
                                 ($r['filter'] == 'email') ? $r['filter'] = FILTER_VALIDATE_EMAIL : null;
@@ -142,7 +153,6 @@ class Forms
                                 if (!filter_var($method[$c], $r['filter'])) {
                                     return false;
                                 }
-                                $this->results[$c] = $method[$c];
                             }
                             $changes = array_diff(array_keys($r), [
                                 'type',
@@ -155,6 +165,7 @@ class Forms
                             if (!empty($changes)) {
                                 throw new FormsException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
                             }
+                            $this->results[$c] = $method[$c];
                         }
                     }
                 }
@@ -170,10 +181,20 @@ class Forms
     }
 
     /**
+     * @param bool $convertHtmlSpecialChars
      * @return array
      */
-    public function getResults(): array {
-        return $this->results;
+    public function getResults($convertHtmlSpecialChars = true): array {
+        if ($convertHtmlSpecialChars) {
+            $results = [];
+            foreach ($this->results as $result) {
+                (is_string($result)) ? array_push($results, htmlspecialchars($result)) : null;
+            }
+
+            return $results;
+        } else {
+            return $this->results;
+        }
     }
 
 }
