@@ -77,30 +77,34 @@ class App
 
             require_once('vendor/autoload.php');
 
-            $this->response = $this->response->withStatus(500);
-
             if ($this->globalConfig['errorLogger']) {
                 $logger = new \Monolog\Logger('BDS_Framework');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler('storage/logs/frameworkLogs.log', \Monolog\Logger::WARNING));
 
                 $logger->warning($e);
             }
+            
+            $args = func_get_args();
+            $className = (is_int($e)) ? 'PHP_Error' : get_class($e);
+            $message = (is_int($e)) ? $args[1] : $e->getMessage();
 
             $template = new \BDSCore\Template\Twig($this->response);
             if ($this->globalConfig['showExceptions']) {
                 $template->render('errors/error500.twig', [
-                    'className' => get_class($e),
-                    'exception' => $e->getMessage()
+                    'className' => $className,
+                    'exception' => $message
                 ]);
             } else {
                 $template->render('errors/error500.twig', ['exception' => false]);
             }
 
+            $this->response = $this->response->withStatus(500);
+
             \Http\Response\send($this->response);
             exit();
         } catch (Exception $ex) {
-            $this->response = $this->response->withStatus(500);
             $this->response->getBody()->write('--[ Error 500 ]--');
+            $this->response = $this->response->withStatus(500);
 
             \Http\Response\send($this->response);
         }

@@ -22,6 +22,7 @@ $app = new \BDSCore\Application\App(
     $response
 );
 
+set_error_handler([$app, 'catchException']);
 set_exception_handler([$app, 'catchException']);
 
 function debug($item) {
