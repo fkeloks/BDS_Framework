@@ -45,9 +45,7 @@ class BaseController
      * @return void
      */
     public function render(string $path, array $args = []) {
-        $this->response->getBody()->write(
-            $this->templateClass->render($path, $args)
-        );
+        $this->templateClass->render($path, $args);
     }
 
     /**
@@ -75,10 +73,20 @@ class BaseController
 
     /**
      * @param ResponseInterface $response
-     * @return void
+     * @return ResponseInterface
      */
-    public function setResponse(ResponseInterface $response) {
+    public function setResponse(ResponseInterface $response): ResponseInterface {
         $this->response = $response;
+
+        return $this->response;
+    }
+
+    /**
+     * @param string $header
+     * @return \string[]
+     */
+    public function getHeader(string $header) {
+        return $this->response->getHeader($header);
     }
 
     /**
