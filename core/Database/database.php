@@ -45,8 +45,8 @@ class Database
             $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
         } elseif ($driver == 'mysql') {
             $params = [
-                'host'     => \BDSCore\Config\Config::getConfig('db_host'),
-                'name'     => \BDSCore\Config\Config::getConfig('db_name'),
+                'host' => \BDSCore\Config\Config::getConfig('db_host'),
+                'name' => \BDSCore\Config\Config::getConfig('db_name'),
                 'username' => \BDSCore\Config\Config::getConfig('db_username'),
                 'password' => \BDSCore\Config\Config::getConfig('db_password')
             ];

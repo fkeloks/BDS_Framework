@@ -17,8 +17,10 @@
     },
     "require": {
         "php": "^7.0 || ^7.1",
-        "bramus/router": "~1.0",
+        "guzzlehttp/psr7": "^1.4",
+        "http-interop/response-sender": "^1.0",
         "monolog/monolog": "^1.23",
+        "nikic/fast-route": "^1.2",
         "twig/twig": "~2.0"
     },
     "require-dev": {

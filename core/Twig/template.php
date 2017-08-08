@@ -1,16 +1,17 @@
 <?php
 
-namespace BDSCore\Twig;
+namespace BDSCore\Template;
 
 use \BDSCore\Config\Config;
 use \BDSCore\Router\Router;
 use \BDSCore\Debug\DebugBar;
+use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Template
- * @package BDSCore\Twig
+ * Class Twig
+ * @package BDSCore\Template
  */
-class Template
+class Twig
 {
 
     /**
@@ -19,13 +20,22 @@ class Template
     private $twig = null;
 
     /**
-     * Template constructor.
+     * @var ResponseInterface
      */
-    function __construct() {
+    private $response;
+
+    /**
+     * Template constructor.
+     * @param ResponseInterface $response
+     */
+    function __construct(ResponseInterface $response) {
+        $this->response = $response;
+
         $loader = new \Twig_Loader_Filesystem(Config::getConfig('twigViews'));
         $twig = new \Twig_Environment($loader, [
             'cache' => Config::getConfig('twigCache'),
         ]);
+
         $twig->addFunction(new \Twig_SimpleFunction('assets', function (string $path): string {
             return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/public/' . $path;
         }));
@@ -35,6 +45,7 @@ class Template
         $twig->addFunction(new \Twig_SimpleFunction('path', function(string $routeName = null, array $params = []): string {
             return Router::getPath($routeName, $params);
         }));
+
         $this->twig = $twig;
     }
 
@@ -46,9 +57,9 @@ class Template
         DebugBar::pushElement('View', $path);
         $file = $this->twig->render($path, $args);
         if(Config::getConfig('debugBar')) {
-            echo DebugBar::insertDebugBar($file);
+            $this->response->getBody()->write(DebugBar::insertDebugBar($file));
         } else {
-            echo $file;
+            $this->response->getBody()->write($file);
         }
     }
 

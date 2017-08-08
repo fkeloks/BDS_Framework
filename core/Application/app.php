@@ -2,6 +2,9 @@
 
 namespace BDSCore\Application;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Class App
  * @package BDSCore\Application
@@ -35,17 +38,25 @@ class App
     private $securityClass;
 
     /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
      * App constructor.
      * @param array $configs
      * @param array $classes
+     * @param ResponseInterface $response
      */
-    public function __construct(array $configs, array $classes) {
+    public function __construct(array $configs, array $classes, ResponseInterface $response) {
         $this->globalConfig = $configs['globalConfig'];
         $this->securityConfig = $configs['securityConfig'];
 
         $this->debugClass = $classes['debugClass'];
         $this->securityClass = $classes['securityClass'];
         $this->routerClass = $classes['routerClass'];
+
+        $this->response = $response;
     }
 
     /**
@@ -66,7 +77,7 @@ class App
 
             require_once('vendor/autoload.php');
 
-            header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+            $this->response = $this->response->withStatus(500);
 
             if ($this->globalConfig['errorLogger']) {
                 $logger = new \Monolog\Logger('BDS_Framework');
@@ -75,7 +86,7 @@ class App
                 $logger->warning($e);
             }
 
-            $template = new \BDSCore\Twig\Template();
+            $template = new \BDSCore\Template\Twig($this->response);
             if ($this->globalConfig['showExceptions']) {
                 $template->render('errors/error500.twig', [
                     'className' => get_class($e),
@@ -85,10 +96,13 @@ class App
                 $template->render('errors/error500.twig', ['exception' => false]);
             }
 
+            \Http\Response\send($this->response);
             exit();
         } catch (Exception $ex) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-            die('-[ Error 500 -]');
+            $this->response = $this->response->withStatus(500);
+            $this->response->getBody()->write('--[ Error 500 ]--');
+
+            \Http\Response\send($this->response);
         }
     }
 
@@ -132,7 +146,6 @@ class App
         (!isset($_SESSION['auth'])) ? $_SESSION['auth'] = false : null;
         if ($this->securityConfig['authRequired']) {
             if ($_SESSION['auth'] !== true) {
-                $router->activateLogin($this->securityConfig['authPage']);
                 if ($this->globalConfig['debugBar']) {
                     $timeStop = microtime(true);
                     setcookie('BDS_loadingTime', '~' . round(($timeStop - $timeStart), 3) * 1000 . 'ms', time() + 15);
@@ -156,16 +169,24 @@ class App
     }
 
     /**
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @param $timeStart
+     * @return void
      */
-    public function run($timeStart) {
-        (isset($_GET['errorCode'])) ? \BDSCore\Errors\Errors::returnError($_GET['errorCode']) : null;
+    public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
+        (isset($_GET['errorCode'])) ? \BDSCore\Errors\Errors::returnError($response, $_GET['errorCode']) : null;
+
         $this->startSession();
         $this->checkPermissions();
         $this->checkAuth($timeStart);
         $this->pushToDebugBar();
-        $this->routerClass->run();
+        $response = $this->routerClass->run();
+
+        \BDSCore\Debug\DebugBar::pushElement('RequestMethod', $request->getMethod());
         $this->insertTimeToDebugBar($timeStart);
+
+        \Http\Response\send($response);
     }
 
 }

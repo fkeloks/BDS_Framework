@@ -2,6 +2,10 @@
 
 namespace BDSCore\Router;
 
+use \BDSCore\Config\Config;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Class Router
  * @package BDSCore\Router
@@ -27,12 +31,26 @@ class Router
     private static $paths = [];
 
     /**
-     * Router constructor.
+     * @var RequestInterface
      */
-    public function __construct() {
-        $this->routerClass = new \Bramus\Router\Router();
+    private $request;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
+     * Router constructor.
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     */
+    public function __construct(RequestInterface $request, ResponseInterface $response) {
+        $this->request = $request;
+        $this->response = $response;
+
         $this->configRouter = include('./config/router.php');
-        $this->templateClass = new \BDSCore\Twig\Template();
+        $this->templateClass = new \BDSCore\Template\Twig($response);
     }
 
     /**
@@ -69,44 +87,86 @@ class Router
     }
 
     /**
-     * @param string $authPage
+     * @return ResponseInterface
      */
-    public function activateLogin(string $authPage) {
-        $this->routerClass->get('/login', function () use ($authPage) {
-            \BDSCore\Security\Login::renderLogin($authPage);
-        });
-        $this->routerClass->post('/login', function () {
-            \BDSCore\Security\Login::checkForm();
-        });
-    }
+    public function run(): ResponseInterface {
+        $routes = $this->configRouter['routes'];
+        $dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $r) use ($routes) {
 
-    /**
-     * @return bool
-     */
-    public function run(): bool {
-        if (\BDSCore\Config\Config::getSecurityConfig('authRequired')) {
-            $this->setPath('login', '/login');
-            $this->setPath('logout', '/logout');
-            $this->routerClass->get('/logout', function () {
-                $_SESSION['auth'] = false;
-                header('Location: /');
-            });
+            if (Config::getSecurityConfig('authRequired')) {
+
+                $this->setPath('login', '/login');
+                $r->get('/login', function () {
+                    \BDSCore\Security\Login::renderLogin($this->response, Config::getSecurityConfig('authPage'));
+                });
+                $r->post('/login', function () {
+                    $this->response = \BDSCore\Security\Login::checkForm($this->response);
+                });
+
+                $this->setPath('logout', '/logout');
+                $r->get('/logout', function () {
+                    $_SESSION['auth'] = false;
+                    $this->response->withHeader('Location', '/');
+                });
+
+            }
+
+            foreach ($routes as $route => $c) {
+                $this->setPath($route, $c[1]);
+                $exp = explode('@', $c[2]);
+                $r->addRoute(strtoupper($c[0]), $c[1], [$this->configRouter['routerConfig']['controllersNamespace'] . '\\' . $exp[0], $exp[1]]);
+            }
+
+        });
+
+        $httpMethod = $_SERVER['REQUEST_METHOD'];
+        $uri = $_SERVER['REQUEST_URI'];
+
+        if (false !== $pos = strpos($uri, '?')) {
+            $uri = substr($uri, 0, $pos);
+        }
+        $uri = rawurldecode($uri);
+
+        $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+        switch ($routeInfo[0]) {
+            case \FastRoute\Dispatcher::NOT_FOUND:
+
+                $this->response->getBody()->write(
+                    $this->templateClass->render($this->configRouter['routerConfig']['viewError404'])
+                );
+                $this->response = $this->response->withStatus(404);
+
+                break;
+            case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+
+                // $allowedMethods = $routeInfo[1];
+
+                $this->response->getBody()->write(
+                    $this->templateClass->render($this->configRouter['routerConfig']['viewError405'])
+                );
+                $this->response = $this->response->withStatus(405);
+
+                break;
+            case \FastRoute\Dispatcher::FOUND:
+
+                $handler = $routeInfo[1];
+                $vars = $routeInfo[2];
+
+                if (is_a($handler, 'Closure')) {
+                    $handler();
+                } else {
+                    $class = new $handler[0]($this->request, $this->response);
+                    call_user_func([$class, $handler[1]], $vars);
+
+                    if (is_callable([$class, 'getResponse'])) {
+                        $this->response = call_user_func([$class, 'getResponse']);
+                    }
+                }
+
+                break;
         }
 
-        foreach ($this->configRouter['routes'] as $route => $c) {
-            $this->setPath($route, $c[1]);
-            call_user_func([$this->routerClass, $c[0]], $c[1], $this->configRouter['routerConfig']['controllersNamespace'] . '\\' . $c[2]);
-        }
-
-        $template = $this->templateClass;
-        $this->routerClass->set404(function () use ($template) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-            echo $template->render($this->configRouter['routerConfig']['viewError404']);
-        });
-
-        $this->routerClass->run();
-
-        return true;
+        return $this->response;
     }
 
 }

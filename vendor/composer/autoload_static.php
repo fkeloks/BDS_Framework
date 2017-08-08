@@ -4,10 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
+class ComposerStaticInitc6232509327751367dcb23547cd78076
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '6f2c5977e422114bbaec553e7c77ee8b' => __DIR__ . '/..' . '/http-interop/response-sender/src/functions.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '337663d83d8353cc8c7847676b3b0937' => __DIR__ . '/..' . '/kahlan/kahlan/src/functions.php',
     );
 
@@ -25,6 +28,7 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
         ),
         'M' => 
         array (
@@ -33,6 +37,14 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'K' => 
         array (
             'Kahlan\\' => 7,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+        ),
+        'F' => 
+        array (
+            'FastRoute\\' => 10,
         ),
         'B' => 
         array (
@@ -66,6 +78,10 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -73,6 +89,14 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'Kahlan\\' => 
         array (
             0 => __DIR__ . '/..' . '/kahlan/kahlan/src',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'FastRoute\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
         'BDSCore\\' => 
         array (
@@ -96,13 +120,6 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
                 0 => __DIR__ . '/..' . '/twig/twig/lib',
             ),
         ),
-        'B' => 
-        array (
-            'Bramus' => 
-            array (
-                0 => __DIR__ . '/..' . '/bramus/router/src',
-            ),
-        ),
     );
 
     public static $classMap = array (
@@ -113,6 +130,7 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'BDSConsole\\ClearCache' => __DIR__ . '/../..' . '/bin/commands/ClearCache.php',
         'BDSConsole\\ClearLogs' => __DIR__ . '/../..' . '/bin/commands/ClearLogs.php',
         'BDSConsole\\StartServer' => __DIR__ . '/../..' . '/bin/commands/StartServer.php',
+        'BDSCore\\Application\\App' => __DIR__ . '/../..' . '/core/Application/app.php',
         'BDSCore\\BaseController' => __DIR__ . '/../..' . '/core/baseController.php',
         'BDSCore\\Config\\Config' => __DIR__ . '/../..' . '/core/Config/config.php',
         'BDSCore\\Config\\ConfigException' => __DIR__ . '/../..' . '/core/Config/configException.php',
@@ -121,15 +139,52 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'BDSCore\\Debug\\DebugBar' => __DIR__ . '/../..' . '/core/Debug/debugBar.php',
         'BDSCore\\Debug\\DebugException' => __DIR__ . '/../..' . '/core/Debug/debugException.php',
         'BDSCore\\Debug\\Debugger' => __DIR__ . '/../..' . '/core/Debug/debugger.php',
-        'BDSCore\\Debug\\Logger' => __DIR__ . '/../..' . '/core/Debug/logger.php',
         'BDSCore\\Errors\\Errors' => __DIR__ . '/../..' . '/core/Errors/errors.php',
         'BDSCore\\Forms\\Forms' => __DIR__ . '/../..' . '/core/Forms/forms.php',
         'BDSCore\\Forms\\FormsException' => __DIR__ . '/../..' . '/core/Forms/formsException.php',
         'BDSCore\\Router\\Router' => __DIR__ . '/../..' . '/core/Router/router.php',
         'BDSCore\\Security\\Login' => __DIR__ . '/../..' . '/core/Security/login.php',
         'BDSCore\\Security\\Security' => __DIR__ . '/../..' . '/core/Security/security.php',
-        'BDSCore\\Twig\\Template' => __DIR__ . '/../..' . '/core/Twig/template.php',
-        'Bramus\\Router\\Router' => __DIR__ . '/..' . '/bramus/router/src/Bramus/Router/Router.php',
+        'BDSCore\\Template\\Twig' => __DIR__ . '/../..' . '/core/Twig/template.php',
+        'FastRoute\\BadRouteException' => __DIR__ . '/..' . '/nikic/fast-route/src/BadRouteException.php',
+        'FastRoute\\DataGenerator' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator.php',
+        'FastRoute\\DataGenerator\\CharCountBased' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator/CharCountBased.php',
+        'FastRoute\\DataGenerator\\GroupCountBased' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator/GroupCountBased.php',
+        'FastRoute\\DataGenerator\\GroupPosBased' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator/GroupPosBased.php',
+        'FastRoute\\DataGenerator\\MarkBased' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator/MarkBased.php',
+        'FastRoute\\DataGenerator\\RegexBasedAbstract' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator/RegexBasedAbstract.php',
+        'FastRoute\\Dispatcher' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher.php',
+        'FastRoute\\Dispatcher\\CharCountBased' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher/CharCountBased.php',
+        'FastRoute\\Dispatcher\\GroupCountBased' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher/GroupCountBased.php',
+        'FastRoute\\Dispatcher\\GroupPosBased' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher/GroupPosBased.php',
+        'FastRoute\\Dispatcher\\MarkBased' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher/MarkBased.php',
+        'FastRoute\\Dispatcher\\RegexBasedAbstract' => __DIR__ . '/..' . '/nikic/fast-route/src/Dispatcher/RegexBasedAbstract.php',
+        'FastRoute\\Route' => __DIR__ . '/..' . '/nikic/fast-route/src/Route.php',
+        'FastRoute\\RouteCollector' => __DIR__ . '/..' . '/nikic/fast-route/src/RouteCollector.php',
+        'FastRoute\\RouteParser' => __DIR__ . '/..' . '/nikic/fast-route/src/RouteParser.php',
+        'FastRoute\\RouteParser\\Std' => __DIR__ . '/..' . '/nikic/fast-route/src/RouteParser/Std.php',
+        'GuzzleHttp\\Psr7\\AppendStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/AppendStream.php',
+        'GuzzleHttp\\Psr7\\BufferStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/BufferStream.php',
+        'GuzzleHttp\\Psr7\\CachingStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/CachingStream.php',
+        'GuzzleHttp\\Psr7\\DroppingStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/DroppingStream.php',
+        'GuzzleHttp\\Psr7\\FnStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/FnStream.php',
+        'GuzzleHttp\\Psr7\\InflateStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/InflateStream.php',
+        'GuzzleHttp\\Psr7\\LazyOpenStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/LazyOpenStream.php',
+        'GuzzleHttp\\Psr7\\LimitStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/LimitStream.php',
+        'GuzzleHttp\\Psr7\\MessageTrait' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/MessageTrait.php',
+        'GuzzleHttp\\Psr7\\MultipartStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/MultipartStream.php',
+        'GuzzleHttp\\Psr7\\NoSeekStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/NoSeekStream.php',
+        'GuzzleHttp\\Psr7\\PumpStream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/PumpStream.php',
+        'GuzzleHttp\\Psr7\\Request' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Request.php',
+        'GuzzleHttp\\Psr7\\Response' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Response.php',
+        'GuzzleHttp\\Psr7\\ServerRequest' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/ServerRequest.php',
+        'GuzzleHttp\\Psr7\\Stream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Stream.php',
+        'GuzzleHttp\\Psr7\\StreamDecoratorTrait' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/StreamDecoratorTrait.php',
+        'GuzzleHttp\\Psr7\\StreamWrapper' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/StreamWrapper.php',
+        'GuzzleHttp\\Psr7\\UploadedFile' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/UploadedFile.php',
+        'GuzzleHttp\\Psr7\\Uri' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Uri.php',
+        'GuzzleHttp\\Psr7\\UriNormalizer' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/UriNormalizer.php',
+        'GuzzleHttp\\Psr7\\UriResolver' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/UriResolver.php',
         'Kahlan\\Allow' => __DIR__ . '/..' . '/kahlan/kahlan/src/Allow.php',
         'Kahlan\\Analysis\\Debugger' => __DIR__ . '/..' . '/kahlan/kahlan/src/Analysis/Debugger.php',
         'Kahlan\\Analysis\\Inspector' => __DIR__ . '/..' . '/kahlan/kahlan/src/Analysis/Inspector.php',
@@ -308,6 +363,13 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
         'Monolog\\Processor\\UidProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/UidProcessor.php',
         'Monolog\\Processor\\WebProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/WebProcessor.php',
         'Monolog\\Registry' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Registry.php',
+        'Psr\\Http\\Message\\MessageInterface' => __DIR__ . '/..' . '/psr/http-message/src/MessageInterface.php',
+        'Psr\\Http\\Message\\RequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/RequestInterface.php',
+        'Psr\\Http\\Message\\ResponseInterface' => __DIR__ . '/..' . '/psr/http-message/src/ResponseInterface.php',
+        'Psr\\Http\\Message\\ServerRequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/ServerRequestInterface.php',
+        'Psr\\Http\\Message\\StreamInterface' => __DIR__ . '/..' . '/psr/http-message/src/StreamInterface.php',
+        'Psr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/..' . '/psr/http-message/src/UploadedFileInterface.php',
+        'Psr\\Http\\Message\\UriInterface' => __DIR__ . '/..' . '/psr/http-message/src/UriInterface.php',
         'Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/AbstractLogger.php',
         'Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/Psr/Log/InvalidArgumentException.php',
         'Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/Psr/Log/LogLevel.php',
@@ -758,10 +820,10 @@ class ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit984fa9ae7d96c9a8b09e5b5b5883c7ad::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc6232509327751367dcb23547cd78076::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc6232509327751367dcb23547cd78076::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc6232509327751367dcb23547cd78076::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitc6232509327751367dcb23547cd78076::$classMap;
 
         }, null, ClassLoader::class);
     }
