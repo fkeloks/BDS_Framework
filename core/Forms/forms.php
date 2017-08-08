@@ -50,14 +50,15 @@ class Forms
     }
 
     /**
-     * @param string $item
+     * @param $item
      * @param string $type
      * @return bool
      */
-    private function checkType(string $item, string $type): bool {
+    private function checkType($item, string $type): bool {
         ($type == 'int') ? $type = 'integer' : null;
         ($type == 'str') ? $type = 'string' : null;
         ($type == 'bool') ? $type = 'boolean' : null;
+        var_dump($item);
         if (gettype($item) != $type) {
             return false;
         } else {

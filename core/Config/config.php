@@ -41,7 +41,7 @@ class Config
                 if (isset($config[$element])) {
                     return $config[$element];
                 } else {
-                    throw new ConfigException('The "' . $config[$element] . '" element does not appear to be present in the configuration file.');
+                    throw new ConfigException('The "' . $element . '" element does not appear to be present in the configuration file.');
                 }
             }
         } else {

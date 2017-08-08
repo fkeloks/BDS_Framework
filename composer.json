@@ -24,11 +24,11 @@
         "twig/twig": "~2.0"
     },
     "require-dev": {
-        "kahlan/kahlan": "^3.1",
+        "phpunit/phpunit": "^6.3",
         "symfony/console": "^3.3"
     },
     "scripts": {
-        "test": "kahlan --reporter=verbose --spec=specs"
+        "test": "phpunit"
     },
     "autoload": {
         "psr-4": {
