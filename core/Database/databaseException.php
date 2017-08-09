@@ -8,5 +8,8 @@ namespace BDSCore\Database;
  */
 class DatabaseException extends \Exception
 {
-
+    public function test()
+    {
+        return 'ERROR CONNEXIOn DATABASE';
+    }
 }
