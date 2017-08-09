@@ -64,7 +64,7 @@ class App
      */
     public function catchException($e) {
         try {
-            $permsCode = substr(sprintf('%o', fileperms('../cache/')), -4);
+            $permsCode = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/cache'))), -4);
             if ($permsCode != '0777') {
                 die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
             }
@@ -75,11 +75,12 @@ class App
                 die("To work properly, BDS Framework needs at least PHP version 7.0.<br />Current version of PHP: {$phpVersion}");
             }
 
-            require_once('../vendor/autoload.php');
+            require_once(\BDSCore\Config\Config::getDirectoryRoot('/vendor/autoload.php'));
 
             if ($this->globalConfig['errorLogger']) {
                 $logger = new \Monolog\Logger('BDS_Framework');
-                $logger->pushHandler(new \Monolog\Handler\StreamHandler('storage/logs/frameworkLogs.log', \Monolog\Logger::WARNING));
+                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('storage/logs/FrameworkLogs.log');
+                $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::WARNING));
 
                 $logger->warning($e);
             }

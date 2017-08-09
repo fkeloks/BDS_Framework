@@ -2,6 +2,10 @@
 
 class AppTest extends \PHPUnit\Framework\TestCase {
 
+    public function setUp() {
+        \BDSCore\Config\Config::setDirectoryConfig();
+    }
+
     public function testObjectsRequestAndResponse() {
         $request = new \GuzzleHttp\Psr7\ServerRequest('get', '/');
         $this->assertInstanceOf(\Psr\Http\Message\ServerRequestInterface::class, $request);

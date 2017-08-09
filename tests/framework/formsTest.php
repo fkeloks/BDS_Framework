@@ -5,6 +5,10 @@ use \BDSCore\Forms\Forms;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
 
+    public function setUp() {
+        \BDSCore\Config\Config::setDirectoryConfig();
+    }
+
     public function testInstanceOfForm() {
         $form = new Forms('get');
         $this->assertInstanceOf(Forms::class, $form);
@@ -13,17 +17,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testTypeOfItem() {
-        $_GET['item'] = 123;
         $form = new Forms('get');
         $form->configure([
             'item' => 'string'
         ]);
+        $_GET['item'] = 123;
         $this->assertFalse($form->validate());
 
-        $_GET['item'] = 'Bob';
         $form->configure([
             'item' => 'int'
         ]);
+        $_GET['item'] = 'Bob';
         $this->assertFalse($form->validate());
 
         $_GET['item'] = 'Bob';
