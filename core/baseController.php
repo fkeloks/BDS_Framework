@@ -2,6 +2,9 @@
 
 namespace BDSCore;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Class BaseController
  * @package BDSCore
@@ -13,54 +16,91 @@ class BaseController
      * @var Twig\Template
      */
     private $templateClass;
+
     /**
-     * @var \Bramus\Router\Router
+     * @var RequestInterface
      */
-    private $routerClass;
+    private $request;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
 
     /**
      * BaseController constructor.
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      */
-    public function __construct() {
-        $this->templateClass = new \BDSCore\Twig\Template();
-        $this->routerClass = new \Bramus\Router\Router();
+    public function __construct(RequestInterface $request, ResponseInterface $response) {
+        $this->request = $request;
+        $this->response = $response;
 
-        \BDSCore\Debug\DebugBar::pushElement('RequestMethod', $this->getMethod());
+        $this->templateClass = new \BDSCore\Template\Twig($response);
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @param array $args
+     * @return void
      */
-    public function render($path, $args = []) {
-        $template = new $this->templateClass;
-        echo $template->render($path, $args);
+    public function render(string $path, array $args = []) {
+        $this->templateClass->render($path, $args);
     }
 
     /**
      * @param string $routeNameOrUrl
+     * @return void
      */
     public function redirect(string $routeNameOrUrl) {
         $url = \BDSCore\Router\Router::getPath($routeNameOrUrl);
-        ($url != '') ? header('Location:' . $url) : header('Location:' . $routeNameOrUrl);
+        $this->response = ($url != '') ? $this->response->withHeader('Location', $url) : $this->response->withHeader('Location', $routeNameOrUrl);
     }
 
     /**
-     * @return array
+     * @return RequestInterface
+     */
+    public function getRequest(): RequestInterface {
+        return $this->request;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function getResponse(): ResponseInterface {
+        return $this->response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function setResponse(ResponseInterface $response): ResponseInterface {
+        $this->response = $response;
+
+        return $this->response;
+    }
+
+    /**
+     * @param string $header
+     * @return \string[]
+     */
+    public function getHeader(string $header) {
+        return $this->response->getHeader($header);
+    }
+
+    /**
+     * @return \string[][]
      */
     public function getHeaders() {
-        $router = $this->routerClass;
-
-        return $router->getRequestHeaders();
+        return $this->request->getHeaders();
     }
 
     /**
      * @return string
      */
-    public function getMethod() {
-        $router = $this->routerClass;
-
-        return $router->getRequestMethod();
+    public function getMethod(): string {
+        return $this->request->getMethod();
     }
 
 }

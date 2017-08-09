@@ -2,6 +2,8 @@
 
 namespace BDSCore\Security;
 
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Class Login
  * @package BDSCore\Security
@@ -10,34 +12,39 @@ class Login
 {
 
     /**
+     * @param ResponseInterface $response
      * @param string $authPage
      */
-    public static function renderLogin(string $authPage) {
-        $template = new \BDSCore\Twig\Template();
-        $template->render($authPage);
-        exit();
+    public static function renderLogin(ResponseInterface $response, string $authPage) {
+        $template = new \BDSCore\Template\Twig($response);
+        return $template->render($authPage);
     }
 
-    public function checkForm() {
+    /**
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public static function checkForm(ResponseInterface $response): ResponseInterface {
         $authAccounts = \BDSCore\Config\Config::getSecurityConfig('authAccounts');
-        $form = new \BDSCore\Forms\Forms('post', [
+        $form = new \BDSCore\Form\Form('post');
+        $form->configure([
             'username' => [
                 'keyIncludedIn' => $authAccounts
             ],
             'password' => [
-                'valueIncludedIn' => $authAccounts
+                'min-length' => 3
             ]
         ]);
         if ($form->validate()) {
-            $results = $form->getResults();
-            if ($authAccounts[$results['username']] == $results['password']) {
+            $results = $form->getResults(false);
+            if ((string) $authAccounts[$results['username']] == (string) $results['password']) {
                 $_SESSION['auth'] = true;
-                header('Location: /');
+                return $response->withHeader('Location', '/');
             } else {
-                header('Location: login');
+                return $response->withHeader('Location', 'login');
             }
         } else {
-            header('Location: login');
+            return $response->withHeader('Location', '/login');
         }
     }
 

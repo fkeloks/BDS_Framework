@@ -28,20 +28,16 @@ class Debugger
             }
         }
 
-        if (\BDSCore\Config\Config::getConfig('debugFile')) {
+        if (\BDSCore\Config\Config::getConfig('debugLogger')) {
             date_default_timezone_set(\BDSCore\Config\Config::getConfig('timezone'));
             setlocale(LC_TIME, \BDSCore\Config\Config::getConfig('locale'));
-            $date = strftime('%A %d %B %Y, %H:%M:%S');
 
-            if (is_string($item) || is_array($item) || is_bool($item)) {
-                $dump = var_export($item, true);
-            } else {
-                $dump = print_r($item, true);
-            }
+            $logger = new \Monolog\Logger('BDS_Framework');
+            $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('storage/logs/debugLogs.log');
+            $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::DEBUG));
 
-            $log = "\n--------------------------------------------------------------------------------------------------\nBDSDebug :: {$date}\n{$dump}";
-
-            file_put_contents($this->directoryLogs . 'debugLogs.txt', $log, FILE_APPEND);
+            (!is_string($item)) ? $item = var_export($item, true) : null;
+            $logger->debug($item);
         }
 
         return true;

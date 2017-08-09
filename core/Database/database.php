@@ -47,8 +47,8 @@ class Database
             if ($databaseName == null) {
                 throw new DatabaseException('The name of the database must be specified');
             }
-            $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite"); // TODO : voir le chemin ici car ./storage/databases n'existe pas !
-        } elseif ($driver == 'mysql' or $driver == 'postgresql') {
+            $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
+        } elseif ($driver == 'mysql') {
             $params = [
                 'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
                 'database' => \BDSCore\Config\Config::getConfig('db_name'),
