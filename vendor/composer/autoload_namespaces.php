@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Bramus' => array($vendorDir . '/bramus/router/src'),
+    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
 );
