@@ -87,6 +87,26 @@ class Router
     }
 
     /**
+     * @param $method
+     * @param array $args
+     * @return array
+     */
+    private function getArgsByName($method, array $args = array()): array {
+        $reflection = new \ReflectionMethod($method[0], $method[1]);
+
+        $pass = array();
+        foreach ($reflection->getParameters() as $param) {
+            if (isset($args[$param->getName()])) {
+                $pass[] = $args[$param->getName()];
+            } else {
+                $pass[] = null;
+            }
+        }
+
+        return $pass;
+    }
+
+    /**
      * @return ResponseInterface
      */
     public function run(): ResponseInterface {
@@ -156,7 +176,8 @@ class Router
                     $handler();
                 } else {
                     $class = new $handler[0]($this->request, $this->response);
-                    call_user_func([$class, $handler[1]], $vars);
+
+                    call_user_func_array([$class, $handler[1]], $this->getArgsByName([$class, $handler[1]], $vars));
 
                     if (is_callable([$class, 'getResponse'])) {
                         $this->response = call_user_func([$class, 'getResponse']);
