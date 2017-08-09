@@ -31,13 +31,13 @@ class Twig
     function __construct(ResponseInterface $response) {
         $this->response = $response;
 
-        $loader = new \Twig_Loader_Filesystem(Config::getConfig('twigViews'));
+        $loader = new \Twig_Loader_Filesystem('../' . Config::getConfig('twigViews'));
         $twig = new \Twig_Environment($loader, [
             'cache' => Config::getConfig('twigCache'),
         ]);
 
         $twig->addFunction(new \Twig_SimpleFunction('assets', function (string $path): string {
-            return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/public/' . $path;
+            return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/' . $path;
         }));
         $twig->addFunction(new \Twig_SimpleFunction('getLocale', function (): string {
             return Config::getConfig('locale');

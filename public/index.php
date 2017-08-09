@@ -4,10 +4,12 @@ error_reporting(E_ALL ^ E_WARNING);
 
 $timeStart = microtime(true);
 
-require('vendor/autoload.php');
+require('../vendor/autoload.php');
 
 $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 $response = new \GuzzleHttp\Psr7\Response();
+
+\BDSCore\Config\Config::setDirectoryConfig();
 
 $app = new \BDSCore\Application\App(
     [

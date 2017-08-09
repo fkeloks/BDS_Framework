@@ -49,7 +49,7 @@ class Router
         $this->request = $request;
         $this->response = $response;
 
-        $this->configRouter = include('./config/router.php');
+        $this->configRouter = \BDSCore\Config\Config::getAllRouterConfig();
         $this->templateClass = new \BDSCore\Template\Twig($response);
     }
 

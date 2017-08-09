@@ -175,7 +175,7 @@ class ComposerStaticInitc6232509327751367dcb23547cd78076
         'BDSCore\\Router\\Router' => __DIR__ . '/../..' . '/core/Router/router.php',
         'BDSCore\\Security\\Login' => __DIR__ . '/../..' . '/core/Security/login.php',
         'BDSCore\\Security\\Security' => __DIR__ . '/../..' . '/core/Security/security.php',
-        'BDSCore\\Template\\Twig' => __DIR__ . '/../..' . '/core/Twig/template.php',
+        'BDSCore\\Template\\Twig' => __DIR__ . '/../..' . '/core/Template/twig.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Filter\\Doctrine\\DoctrineCollectionFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Filter/Doctrine/DoctrineCollectionFilter.php',

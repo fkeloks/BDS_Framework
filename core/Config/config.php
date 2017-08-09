@@ -9,14 +9,24 @@ namespace BDSCore\Config;
 class Config
 {
 
+    private static $configDirectory;
+
+    public static function setDirectoryConfig() {
+        self::$configDirectory = '../config';
+    }
+
     /**
      * @return array
      */
-    public static function getAllConfig(): array {
+    public static function getAllConfig() {
         if (isset($_SESSION)) {
             return $_SESSION['config'];
         } else {
-            $config = include('./config/config.php');
+            $config = include(self::$configDirectory . '/config.php');
+
+            if (!is_array($config)) {
+                throw new ConfigException('Unable to retrieve site global configuration.');
+            }
 
             return $config;
         }
@@ -36,7 +46,7 @@ class Config
                     throw new ConfigException('The "' . $_SESSION['config'][$element] . 'element does not appear to be present in the session.');
                 }
             } else {
-                $config = include('./config/config.php');
+                $config = include(self::$configDirectory . '/config.php');
 
                 if (isset($config[$element])) {
                     return $config[$element];
@@ -50,12 +60,25 @@ class Config
     }
 
     /**
+     * @return array
+     * @throws ConfigException
+     */
+    public static function getAllRouterConfig(): array {
+        $config = include(self::$configDirectory . '/router.php');
+        if (!is_array($config)) {
+            throw new ConfigException('Unable to retrieve site router configuration.');
+        }
+
+        return $config;
+    }
+
+    /**
      * @param string|null $element
      * @throws ConfigException
      */
     public static function getRouterConfig(string $element = null) {
         if ($element != null) {
-            $config = include('./config/router.php');
+            $config = include(self::$configDirectory . '/router.php');
 
             if (isset($config['routerConfig'][$element])) {
                 return $config['routerConfig'][$element];
@@ -72,7 +95,7 @@ class Config
      * @throws ConfigException
      */
     public static function getAllSecurityConfig(): array {
-        $config = include('./config/security.php');
+        $config = include(self::$configDirectory . '/security.php');
         if (!is_array($config)) {
             throw new ConfigException('Unable to retrieve site security configuration.');
         }
@@ -86,7 +109,7 @@ class Config
      */
     public static function getSecurityConfig(string $element = null) {
         if ($element != null) {
-            $config = include('./config/security.php');
+            $config = include(self::$configDirectory . '/security.php');
 
             if (isset($config[$element])) {
                 return $config[$element];

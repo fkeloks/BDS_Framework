@@ -29,7 +29,7 @@ return array(
     'BDSCore\\Router\\Router' => $baseDir . '/core/Router/router.php',
     'BDSCore\\Security\\Login' => $baseDir . '/core/Security/login.php',
     'BDSCore\\Security\\Security' => $baseDir . '/core/Security/security.php',
-    'BDSCore\\Template\\Twig' => $baseDir . '/core/Twig/template.php',
+    'BDSCore\\Template\\Twig' => $baseDir . '/core/Template/twig.php',
     'DeepCopy\\DeepCopy' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
     'DeepCopy\\Exception\\CloneException' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
     'DeepCopy\\Filter\\Doctrine\\DoctrineCollectionFilter' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/Filter/Doctrine/DoctrineCollectionFilter.php',
