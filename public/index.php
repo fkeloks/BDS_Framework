@@ -31,6 +31,4 @@ function debug($item) {
     $app->debug($item);
 }
 
-throw new Exception('ue');
-
 $app->run($request, $response, $timeStart);
