@@ -1,6 +1,6 @@
 <?php
 
-use \BDSCore\Forms\Forms;
+use \BDSCore\Form\Form;
 
 class FormTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,14 +10,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testInstanceOfForm() {
-        $form = new Forms('get');
-        $this->assertInstanceOf(Forms::class, $form);
-        $form = new Forms('post');
-        $this->assertInstanceOf(Forms::class, $form);
+        $form = new Form('get');
+        $this->assertInstanceOf(Form::class, $form);
+        $form = new Form('post');
+        $this->assertInstanceOf(Form::class, $form);
     }
 
     public function testTypeOfItem() {
-        $form = new Forms('get');
+        $form = new Form('get');
         $form->configure([
             'item' => 'string'
         ]);
@@ -38,7 +38,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testValueOfItem() {
-        $form = new Forms('get');
+        $form = new Form('get');
         $form->configure([
             'item' => [
                 'value' => 'Bob'
@@ -56,7 +56,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testMinLengthOfItem() {
-        $form = new Forms('get');
+        $form = new Form('get');
         $form->configure([
             'item' => [
                 'min-length' => 3
@@ -74,7 +74,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testMaxLengthOfItem() {
-        $form = new Forms('get');
+        $form = new Form('get');
         $form->configure([
             'item' => [
                 'max-length' => 5
@@ -99,7 +99,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ],
             'K4'
         ];
-        $form = new Forms('get');
+        $form = new Form('get');
         $form->configure([
             'item' => [
                 'keyIncludedIn' => $array

@@ -26,7 +26,7 @@ class Login
      */
     public static function checkForm(ResponseInterface $response): ResponseInterface {
         $authAccounts = \BDSCore\Config\Config::getSecurityConfig('authAccounts');
-        $form = new \BDSCore\Forms\Forms('post');
+        $form = new \BDSCore\Form\Form('post');
         $form->configure([
             'username' => [
                 'keyIncludedIn' => $authAccounts

@@ -1,12 +1,12 @@
 <?php
 
-namespace BDSCore\Forms;
+namespace BDSCore\Form;
 
 /**
- * Class Forms
- * @package BDSCore\Forms
+ * Class Form
+ * @package BDSCore\Form
  */
-class Forms
+class Form
 {
 
     /**
@@ -25,27 +25,27 @@ class Forms
     private $results = [];
 
     /**
-     * Forms constructor.
+     * Form constructor.
      * @param string|null $method
-     * @throws FormsException
+     * @throws FormException
      */
     public function __construct(string $method = null) {
         if ($method != null) {
             $this->method = $method;
         } else {
-            throw new FormsException('The method and the configuration must be specified as a parameter of the constructor of the Forms() class.');
+            throw new FormException('The method and the configuration must be specified as a parameter of the constructor of the Form() class.');
         }
     }
 
     /**
      * @param array|null $configuration
-     * @throws FormsException
+     * @throws FormException
      */
     public function configure(array $configuration = null) {
         if ($configuration != null) {
             $this->configuration = $configuration;
         } else {
-            throw new FormsException('The configuration was not specified');
+            throw new FormException('The configuration was not specified');
         }
     }
 
@@ -91,7 +91,7 @@ class Forms
     /**
      * @param string $method
      * @return string
-     * @throws FormsException
+     * @throws FormException
      */
     private function convertAndGetMethod(string $method) {
         $method = strtolower($method);
@@ -100,7 +100,7 @@ class Forms
         } elseif ($this->method == 'post') {
             $method = $_POST;
         } else {
-            throw new FormsException('The form method is invalid or unsupported.');
+            throw new FormException('The form method is invalid or unsupported.');
         }
 
         return $method;
@@ -108,7 +108,7 @@ class Forms
 
     /**
      * @return bool
-     * @throws FormsException
+     * @throws FormException
      */
     public function validate(): bool {
         if (!empty($this->method) && !empty($this->configuration)) {
@@ -164,7 +164,7 @@ class Forms
                                 'filter',
                             ]);
                             if (!empty($changes)) {
-                                throw new FormsException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
+                                throw new FormException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
                             }
                             $this->results[$c] = $method[$c];
                         }
@@ -175,7 +175,7 @@ class Forms
 
             return true;
         } else {
-            throw new FormsException('The validate() function does not seem to be able to retrieve the configuration or method from the form.');
+            throw new FormException('The validate() function does not seem to be able to retrieve the configuration or method from the form.');
 
             return false;
         }
