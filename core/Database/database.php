@@ -40,7 +40,6 @@ class Database
      */
     public function connect($driver, $databaseName) {
         $params = [
-            'driver'   => \BDSCore\Config\Config::getConfig('db_driver'),
             'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
             'database' => \BDSCore\Config\Config::getConfig('db_name'),
             'username' => \BDSCore\Config\Config::getConfig('db_username'),
