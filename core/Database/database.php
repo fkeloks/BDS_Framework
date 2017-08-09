@@ -67,10 +67,9 @@ class Database
         {
             try {
                 $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
-                throw new DatabaseException();
             } catch (\DatabaseException $e) {
-                echo $e->getMessage();
-                //throw new DatabaseException($e->getMessage());
+                throw new DatabaseException($e->getMessage());
+                //echo $e->getMessage();
             }
         }
         else
