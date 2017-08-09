@@ -1,0 +1,21 @@
+{% extends 'globals/default.twig' %}
+
+{% block title %}Method Not Allowed | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <span class="header"></span>
+
+    <div class="block-center">
+        <h1>Error 405 : Method Not Allowed</h1>
+        <span>
+            Are you sure the website url is correct ? <br>
+            If problem persist, please get in touch the site owner.
+        </span>
+    </div>
+
+    <footer>
+        <span>BDS Version 1.0 | 2017</span>
+    </footer>
+
+{% endblock %}
