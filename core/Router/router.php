@@ -107,6 +107,23 @@ class Router
     }
 
     /**
+     * @return string
+     */
+    private function getBasePath(): string {
+        $basePath = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
+        $uri = $_SERVER['REQUEST_URI'];
+
+        if (false !== $pos = strpos($uri, '?')) {
+            $uri = substr($uri, 0, $pos);
+        }
+
+        $uri = rawurldecode($uri);
+        $basePath = str_replace($basePath, '', $uri);
+
+        return $basePath;
+    }
+
+    /**
      * @return ResponseInterface
      */
     public function run(): ResponseInterface {
@@ -140,14 +157,8 @@ class Router
         });
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
-        $uri = $_SERVER['REQUEST_URI'];
+        $routeInfo = $dispatcher->dispatch($httpMethod, $this->getBasePath());
 
-        if (false !== $pos = strpos($uri, '?')) {
-            $uri = substr($uri, 0, $pos);
-        }
-        $uri = rawurldecode($uri);
-
-        $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
 

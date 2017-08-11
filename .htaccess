@@ -1,0 +1,39 @@
+# ===== Encoding ===== #
+AddDefaultCharset UTF-8
+
+# ===== Options ===== #
+Options +FollowSymlinks
+Options -Indexes
+
+# ===== Security rules ===== #
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>
+
+# ===== Directory index ===== #
+DirectoryIndex ./public/index.php
+
+# ===== Rewrite Engine ===== #
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule . ./public/index.php [L]
+
+# ===== Errors ===== #
+ErrorDocument 400 ./public/index.php?errorCode=400
+ErrorDocument 403 ./public/index.php?errorCode=403
+ErrorDocument 404 ./public/index.php?errorCode=404
+ErrorDocument 500 ./public/index.php?errorCode=500
+ErrorDocument 503 ./public/index.php?errorCode=503
+ErrorDocument 504 ./public/index.php?errorCode=504
+
+# ===== Php values/flags ===== #
+php_value register_globals OFF
+php_value max_execution_time 3600
+php_value post_max_size 60M
+php_value upload_max_filesize 100M
+php_value display_errors off
+php_value html_errors off
