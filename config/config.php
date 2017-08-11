@@ -13,12 +13,12 @@ return [
     'locale'   => 'fr',
 
     'twigViews' => 'app/views',
-    'twigCache' => 'cache/twig',
+    'twigCache' => false, //'cache/twig',
 
-    'db_driver'   => 'mysql',
+    'db_driver'   => 'postgresql',
     'db_host'     => 'localhost',
-    'db_name'     => 'BDS_Framework',
-    'db_username' => 'root',
-    'db_password' => null,
+    'db_name'     => 'framework',
+    'db_username' => 'stephane',
+    'db_password' => 'stephane',
 
 ];

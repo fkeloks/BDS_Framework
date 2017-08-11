@@ -6,14 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Controllers\\dbController' => $baseDir . '/app/controllers/dbController.php',
     'App\\Controllers\\helloController' => $baseDir . '/app/controllers/helloController.php',
     'App\\Controllers\\homeController' => $baseDir . '/app/controllers/homeController.php',
-    'App\\Controllers\\mysqlController' => $baseDir . '/app/controllers/mysqlController.php',
-    'App\\Controllers\\postgresqlController' => $baseDir . '/app/controllers/postgresqlController.php',
     'App\\Controllers\\testController' => $baseDir . '/app/controllers/testController.php',
     'App\\Models\\HelloModel' => $baseDir . '/app/models/helloModel.php',
-    'App\\Models\\MysqlModel' => $baseDir . '/app/models/mysqlModel.php',
-    'App\\Models\\PostgresqlModel' => $baseDir . '/app/models/postgresqlModel.php',
+    'App\\Models\\dbModel' => $baseDir . '/app/models/dbModel.php',
     'BDSConsole\\ClearCache' => $baseDir . '/bin/commands/ClearCache.php',
     'BDSConsole\\ClearLogs' => $baseDir . '/bin/commands/ClearLogs.php',
     'BDSConsole\\StartServer' => $baseDir . '/bin/commands/StartServer.php',

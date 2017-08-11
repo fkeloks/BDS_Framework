@@ -6,21 +6,22 @@ namespace App\Controllers;
  * Class mysqlController
  * @package App\Controllers
  */
-class postgresqlController extends \BDSCore\BaseController
+class dbController extends \BDSCore\BaseController
 {
-    /*private $app;
+    private $app;
 
 
     public function __construct(\Psr\Http\Message\RequestInterface $request, \Psr\Http\Message\ResponseInterface $response)
     {
         parent::__construct($request, $response);
 
-        $this->app = new \App\Models\MysqlModel();
-    }*/
+        $this->app = new \App\Models\dbModel();
+    }
 
 
-    public function index() {
-        $this->render('postgresql.twig');
+    public function index()
+    {
+        $this->render('db.twig', ['bookmarks' => $this->app->bookmarkList()]);
     }
 
 }

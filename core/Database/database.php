@@ -20,16 +20,9 @@ class Database
      * @param string|null $databaseName
      * @throws DatabaseException
      */
-    public function __construct(string $driver = null, string $databaseName = null) {
-        if ($driver == null && $databaseName == null) {
-            throw new DatabaseException('The two parameters of the functions can not both be null');
-        }
-
-        if (!is_string($driver)) {
-            $driver = \BDSCore\Config\Config::getConfig('db_driver');
-        }
-
-        return $this->connect($driver, $databaseName);
+    public function __construct()
+    {
+        return $this->connect();
     }
 
     /**
@@ -38,37 +31,38 @@ class Database
      * @return \PDO
      * @throws DatabaseException
      */
-    public function connect($driver, $databaseName) {
+    public function connect()
+    {
         $params = [
+            'driver'   => \BDSCore\Config\Config::getConfig('db_driver'),
             'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
             'database' => \BDSCore\Config\Config::getConfig('db_name'),
             'username' => \BDSCore\Config\Config::getConfig('db_username'),
             'password' => \BDSCore\Config\Config::getConfig('db_password')
         ];
 
-        if ($driver == 'sqlite')
+        if ($params['driver'] == 'sqlite')
         {
-            if ($databaseName == null) {
+            if ($params['database'] == null) {
                 throw new DatabaseException('The name of the database must be specified');
             }
 
-            $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
+            $this->pdo = new \PDO("sqlite:./storage/databases/{$params['database']}.sqlite");
         }
-        elseif ($driver == 'mysql')
+        elseif ($params['driver'] == 'mysql')
         {
             try {
-                $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);
+                $this->pdo = new \PDO("mysql:host={$params['hostname']};dbname={$params['database']};charset=UTF8", $params['username'], $params['password']);
             } catch (\Exception $e) {
                 throw new DatabaseException($e->getMessage());
             }
         }
-        elseif ($driver == 'postgresql')
+        elseif ($params['driver'] == 'postgresql')
         {
             try {
                 $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
             } catch (\DatabaseException $e) {
                 throw new DatabaseException($e->getMessage());
-                //echo $e->getMessage();
             }
         }
         else

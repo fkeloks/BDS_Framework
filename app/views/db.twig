@@ -1,0 +1,20 @@
+{% extends 'globals/default.twig' %}
+
+{% block title %}DB{% endblock %}
+
+{% block body %}
+
+<div class="block-center">
+    <h1>Test database</h1>
+</div>
+
+<div class="block_table">
+{% for key, bookmark in bookmarks %}
+
+#{{ bookmark.id }} <a href="http://{{ bookmark.url }}">{{ bookmark.nom }}</a><br/>
+
+{% endfor %}
+</div>
+
+{% endblock %}
+
