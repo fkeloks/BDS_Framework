@@ -154,8 +154,12 @@ class ComposerStaticInitc6232509327751367dcb23547cd78076
     public static $classMap = array (
         'App\\Controllers\\helloController' => __DIR__ . '/../..' . '/app/controllers/helloController.php',
         'App\\Controllers\\homeController' => __DIR__ . '/../..' . '/app/controllers/homeController.php',
+        'App\\Controllers\\mysqlController' => __DIR__ . '/../..' . '/app/controllers/mysqlController.php',
+        'App\\Controllers\\postgresqlController' => __DIR__ . '/../..' . '/app/controllers/postgresqlController.php',
         'App\\Controllers\\testController' => __DIR__ . '/../..' . '/app/controllers/testController.php',
         'App\\Models\\HelloModel' => __DIR__ . '/../..' . '/app/models/helloModel.php',
+        'App\\Models\\MysqlModel' => __DIR__ . '/../..' . '/app/models/mysqlModel.php',
+        'App\\Models\\PostgresqlModel' => __DIR__ . '/../..' . '/app/models/postgresqlModel.php',
         'BDSConsole\\ClearCache' => __DIR__ . '/../..' . '/bin/commands/ClearCache.php',
         'BDSConsole\\ClearLogs' => __DIR__ . '/../..' . '/bin/commands/ClearLogs.php',
         'BDSConsole\\StartServer' => __DIR__ . '/../..' . '/bin/commands/StartServer.php',
