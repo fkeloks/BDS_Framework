@@ -124,9 +124,30 @@ class Router
     }
 
     /**
-     * @return ResponseInterface
+     * @return void
      */
-    public function run(): ResponseInterface {
+    private function controlPerms() {
+        $prohibitedDirs = [
+            'app',
+            'bin',
+            'cache',
+            'config',
+            'core',
+            'storage',
+            'tests',
+            'vendor',
+        ];
+        $baseDir = substr($this->getBasePath(), 1);
+        $actualDir = explode('/', $baseDir);
+        if (in_array($actualDir[0], $prohibitedDirs)) {
+            \BDSCore\Errors\Errors::returnError($this->response, 403);
+        }
+    }
+
+    /**
+     * @return \FastRoute\Dispatcher
+     */
+    private function configureDispatcher() {
         $routes = $this->configRouter['routes'];
         $dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $r) use ($routes) {
 
@@ -155,6 +176,17 @@ class Router
             }
 
         });
+
+        return $dispatcher;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function run(): ResponseInterface {
+
+        $this->controlPerms();
+        $dispatcher = $this->configureDispatcher();
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
         $routeInfo = $dispatcher->dispatch($httpMethod, $this->getBasePath());
