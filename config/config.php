@@ -2,15 +2,17 @@
 
 return [
 
-    'debugLogger'    => false,
-    'debugBar'       => true,
-    'showDebug'      => false,
+    'debugLogger' => false,
+    'debugBar'    => true,
+    'showDebug'   => false,
 
     'errorLogger'    => true,
     'showExceptions' => true,
 
     'timezone' => 'Europe/Paris',
     'locale'   => 'fr',
+
+    'routerCache' => false,
 
     'twigViews' => 'app/views',
     'twigCache' => 'cache/twig',
