@@ -12,8 +12,7 @@
     ],
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true,
-        "optimize-autoloader": true
+        "sort-packages": true
     },
     "require": {
         "php": "^7.0 || ^7.1",

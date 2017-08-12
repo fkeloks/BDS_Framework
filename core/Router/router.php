@@ -107,9 +107,47 @@ class Router
     }
 
     /**
-     * @return ResponseInterface
+     * @return string
      */
-    public function run(): ResponseInterface {
+    private function getBasePath(): string {
+        $basePath = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
+        $uri = $_SERVER['REQUEST_URI'];
+
+        if (false !== $pos = strpos($uri, '?')) {
+            $uri = substr($uri, 0, $pos);
+        }
+
+        $uri = rawurldecode($uri);
+        $basePath = str_replace($basePath, '', $uri);
+
+        return $basePath;
+    }
+
+    /**
+     * @return void
+     */
+    private function controlPerms() {
+        $prohibitedDirs = [
+            'app',
+            'bin',
+            'cache',
+            'config',
+            'core',
+            'storage',
+            'tests',
+            'vendor',
+        ];
+        $baseDir = substr($this->getBasePath(), 1);
+        $actualDir = explode('/', $baseDir);
+        if (in_array($actualDir[0], $prohibitedDirs)) {
+            \BDSCore\Errors\Errors::returnError($this->response, 403);
+        }
+    }
+
+    /**
+     * @return \FastRoute\Dispatcher
+     */
+    private function configureDispatcher() {
         $routes = $this->configRouter['routes'];
         $dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $r) use ($routes) {
 
@@ -139,15 +177,20 @@ class Router
 
         });
 
+        return $dispatcher;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function run(): ResponseInterface {
+
+        $this->controlPerms();
+        $dispatcher = $this->configureDispatcher();
+
         $httpMethod = $_SERVER['REQUEST_METHOD'];
-        $uri = $_SERVER['REQUEST_URI'];
+        $routeInfo = $dispatcher->dispatch($httpMethod, $this->getBasePath());
 
-        if (false !== $pos = strpos($uri, '?')) {
-            $uri = substr($uri, 0, $pos);
-        }
-        $uri = rawurldecode($uri);
-
-        $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
 

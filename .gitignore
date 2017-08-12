@@ -10,3 +10,5 @@ TODO\.txt
 cache/twig
 storage/databases/*
 storage/logs/*
+
+_tmp
