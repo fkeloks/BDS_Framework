@@ -12,13 +12,13 @@ class Debugger
     /**
      * @var string
      */
-    private $directoryLogs = './storage/logs/';
+    private static $directoryLogs = './storage/logs/';
 
     /**
      * @param $item
      * @return bool
      */
-    public function debug($item): bool {
+    public static function debug($item): bool {
 
         if (\BDSCore\Config\Config::getConfig('showDebug')) {
             if (!is_string($item)) {
@@ -33,8 +33,8 @@ class Debugger
             setlocale(LC_TIME, \BDSCore\Config\Config::getConfig('locale'));
 
             $logger = new \Monolog\Logger('BDS_Framework');
-            $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('storage/logs/debugLogs.log');
-            $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::DEBUG));
+            $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('/storage/logs/debugLogs.log');
+            $logger->pushHandler(new \Monolog\Handler\StreamHandler(self::$logDirectory, \Monolog\Logger::DEBUG));
 
             (!is_string($item)) ? $item = var_export($item, true) : null;
             $logger->debug($item);

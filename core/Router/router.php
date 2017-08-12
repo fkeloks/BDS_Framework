@@ -149,7 +149,20 @@ class Router
      */
     private function configureDispatcher() {
         $routes = $this->configRouter['routes'];
-        $dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $r) use ($routes) {
+        if (Config::getConfig('routerCache')) {
+            $dispatcherClass = \FastRoute\cachedDispatcher::class;
+            $dispatcherOptions = [
+                'cacheFile' => Config::getDirectoryRoot('/cache/router/routesCache.php')
+            ];
+            if (!is_dir(Config::getDirectoryRoot('/cache/router/'))) {
+                mkdir(Config::getDirectoryRoot('/cache/router'));
+            }
+        } else {
+            $dispatcherClass = \FastRoute\simpleDispatcher::class;
+            $dispatcherOptions = [];
+        }
+
+        $dispatcher = $dispatcherClass(function (\FastRoute\RouteCollector $r) use ($routes) {
 
             if (Config::getSecurityConfig('authRequired')) {
 
@@ -175,7 +188,7 @@ class Router
                 $r->addRoute(strtoupper($c[0]), $c[1], [$this->configRouter['routerConfig']['controllersNamespace'] . '\\' . $exp[0], $exp[1]]);
             }
 
-        });
+        }, $dispatcherOptions);
 
         return $dispatcher;
     }

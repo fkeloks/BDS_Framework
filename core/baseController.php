@@ -13,7 +13,7 @@ class BaseController
 {
 
     /**
-     * @var Twig\Template
+     * @var Template\Twig
      */
     private $templateClass;
 
@@ -46,6 +46,59 @@ class BaseController
      */
     public function render(string $path, array $args = []) {
         $this->templateClass->render($path, $args);
+    }
+
+    /**
+     * @param string $className
+     * @param array ...$args
+     * @return bool|object
+     */
+    public function call(string $className, ...$args) {
+        $classList = [
+            'form' => \BDSCore\Form\Form::class,
+            'config' => \BDSCore\Config\Config::class,
+            'database' => \BDSCore\Database\Database::class,
+            'observer' => \BDSCore\Observer\Observer::class,
+            'debugbar' => \BDSCore\Debug\DebugBar::class,
+            'errors' => \BDSCore\Errors\Errors::class
+        ];
+        $className = strtolower($className);
+        if (array_key_exists($className, $classList)) {
+            if (empty($args)) {
+                $class = new $classList[$className]();
+            } else {
+                $refClass = new \ReflectionClass($classList[$className]);
+                $class = $refClass->newInstanceArgs($args);
+            }
+
+            return $class;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $item
+     * @return mixed
+     */
+    public function getGlobalConfig(string $item) {
+        return \BDSCore\Config\Config::getConfig($item);
+    }
+
+    /**
+     * @param string $item
+     * @return mixed
+     */
+    public function getRouterConfig(string $item) {
+        return \BDSCore\Config\Config::getRouterConfig($item);
+    }
+
+    /**
+     * @param string $item
+     * @return mixed
+     */
+    public function getSecurityConfig(string $item) {
+        return \BDSCore\Config\Config::getSecurityConfig($item);
     }
 
     /**

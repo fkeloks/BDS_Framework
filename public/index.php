@@ -17,7 +17,6 @@ $app = new \BDSCore\Application\App(
         'securityConfig' => \BDSCore\Config\Config::getAllSecurityConfig()
     ],
     [
-        'debugClass' => new \BDSCore\Debug\Debugger(),
         'securityClass' => new \BDSCore\Security\Security(),
         'routerClass' => new BDSCore\Router\Router($request, $response)
     ],
@@ -27,8 +26,6 @@ $app = new \BDSCore\Application\App(
 set_error_handler([$app, 'catchException']);
 set_exception_handler([$app, 'catchException']);
 
-function debug($item) {
-    $app->debug($item);
-}
+require('../core/functions/functions.php');
 
 $app->run($request, $response, $timeStart);

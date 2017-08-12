@@ -33,7 +33,7 @@ class Form
         if ($method != null) {
             $this->method = $method;
         } else {
-            throw new FormException('The method and the configuration must be specified as a parameter of the constructor of the Form() class.');
+            throw new FormException('The method must be specified as a parameter of the constructor of the Form() class.');
         }
     }
 

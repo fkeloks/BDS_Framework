@@ -8,6 +8,8 @@
 TODO\.txt
 
 cache/twig
+cache/router
+
 storage/databases/*
 storage/logs/*
 
