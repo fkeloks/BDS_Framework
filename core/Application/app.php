@@ -25,11 +25,6 @@ class App
     /**
      * @var mixed
      */
-    private $debugClass;
-
-    /**
-     * @var mixed
-     */
     private $routerClass;
 
     /**
@@ -52,7 +47,6 @@ class App
         $this->globalConfig = $configs['globalConfig'];
         $this->securityConfig = $configs['securityConfig'];
 
-        $this->debugClass = $classes['debugClass'];
         $this->securityClass = $classes['securityClass'];
         $this->routerClass = $classes['routerClass'];
 
@@ -79,12 +73,12 @@ class App
 
             if ($this->globalConfig['errorLogger']) {
                 $logger = new \Monolog\Logger('BDS_Framework');
-                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('storage/logs/FrameworkLogs.log');
+                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('/storage/logs/FrameworkLogs.log');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::WARNING));
 
                 $logger->warning($e);
             }
-            
+
             $args = func_get_args();
             $className = (is_int($e)) ? 'PHP_Error' : get_class($e);
             $message = (is_int($e)) ? $args[1] : $e->getMessage();
@@ -126,16 +120,6 @@ class App
         if ($this->securityConfig['checkPermissions']) {
             $this->securityClass->checkPermissions();
         }
-    }
-
-    /**
-     * @param $item
-     * @return bool
-     */
-    public function debug($item): bool {
-        \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
-
-        return $this->debugClass->debug($item);
     }
 
     public function pushToDebugBar() {
