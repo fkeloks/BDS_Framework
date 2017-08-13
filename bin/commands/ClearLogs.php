@@ -28,19 +28,21 @@ class ClearLogs extends Command
                 }
             }
             closedir($dir);
-            if($delete == true) {
+            if ($delete == true) {
                 try {
                     rmdir("$directory/$file");
                 } catch (Exception $e) {
                     return $e->getMessage();
                 }
             }
+
             return true;
         }
 
-        $file = clear_dir('./storage/logs');
+        \BDSCore\Config\Config::setDirectoryConfig();
+        $file = clear_dir(\BDSCore\Config\Config::getDirectoryRoot('/storage/logs'));
 
-        if(!$file) {
+        if (!$file) {
             $output->writeln([
                 ' ',
                 '<fg=white;bg=red>',

@@ -5,7 +5,6 @@ require('vendor/autoload.php');
 $application = new Symfony\Component\Console\Application();
 
 $application->add(new \BDSConsole\ClearCache());
-$application->add(new \BDSConsole\StartServer());
 $application->add(new \BDSConsole\ClearLogs());
 
 $application->run();
