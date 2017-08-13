@@ -13,12 +13,12 @@ $response = new \GuzzleHttp\Psr7\Response();
 
 $app = new \BDSCore\Application\App(
     [
-        'globalConfig' => \BDSCore\Config\Config::getAllConfig(),
+        'globalConfig'   => \BDSCore\Config\Config::getAllConfig(),
         'securityConfig' => \BDSCore\Config\Config::getAllSecurityConfig()
     ],
     [
         'securityClass' => new \BDSCore\Security\Security(),
-        'routerClass' => new BDSCore\Router\Router($request, $response)
+        'routerClass'   => new BDSCore\Router\Router($request, $response)
     ],
     $response
 );
