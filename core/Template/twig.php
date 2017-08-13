@@ -39,7 +39,11 @@ class Twig
         ]);
 
         $twig->addFunction(new \Twig_SimpleFunction('assets', function (string $path): string {
-            return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/' . $path;
+            try {
+                return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/' . $path;
+            } catch (\Exception $e) {
+                return '';
+            }
         }));
         $twig->addFunction(new \Twig_SimpleFunction('getLocale', function (): string {
             return Config::getConfig('locale');
@@ -54,6 +58,7 @@ class Twig
     /**
      * @param string $path
      * @param array $args
+     * @return ResponseInterface
      */
     public function render(string $path, array $args = []) {
         DebugBar::pushElement('View', $path);
@@ -63,6 +68,8 @@ class Twig
         } else {
             $this->response->getBody()->write($file);
         }
+
+        return $this->response;
     }
 
 }

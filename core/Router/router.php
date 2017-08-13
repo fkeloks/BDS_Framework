@@ -164,24 +164,6 @@ class Router
 
         $dispatcher = $dispatcherClass(function (\FastRoute\RouteCollector $r) use ($routes) {
 
-            if (Config::getSecurityConfig('authRequired')) {
-
-                $this->setPath('login', '/login');
-                $r->get('/login', function () {
-                    \BDSCore\Security\Login::renderLogin($this->response, Config::getSecurityConfig('authPage'));
-                });
-                $r->post('/login', function () {
-                    $this->response = \BDSCore\Security\Login::checkForm($this->response);
-                });
-
-                $this->setPath('logout', '/logout');
-                $r->get('/logout', function () {
-                    $_SESSION['auth'] = false;
-                    $this->response->withHeader('Location', '/');
-                });
-
-            }
-
             foreach ($routes as $route => $c) {
                 $this->setPath($route, $c[1]);
                 $exp = explode('@', $c[2]);
