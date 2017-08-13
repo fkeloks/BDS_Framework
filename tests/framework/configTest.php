@@ -32,12 +32,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSecurityConfig() {
         $this->assertInternalType('integer', Config::getSecurityConfig('sessionLifetime'));
-        $this->assertInternalType('boolean', Config::getSecurityConfig('authRequired'));
-        $this->assertInternalType('array', Config::getSecurityConfig('authAccounts'));
 
         $securityConfig = Config::getAllSecurityConfig();
         $this->assertInternalType('array', $securityConfig);
-        $this->assertEquals(5, count($securityConfig));
+        $this->assertEquals(2, count($securityConfig));
 
         $this->expectException(\BDSCore\Config\ConfigException::class);
         Config::getSecurityConfig('randomValue');

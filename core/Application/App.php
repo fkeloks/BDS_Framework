@@ -81,7 +81,7 @@ class App
 
             $args = func_get_args();
             $className = (is_int($e)) ? 'PHP_Error' : get_class($e);
-            $message = (is_int($e)) ? $args[1] : $e->getMessage();
+            $message = (is_int($e)) ? $args[1] . ' in ' . $args[2] . ':' . $args[3] : $e->getMessage();
 
             $template = new \BDSCore\Template\Twig($this->response);
             if ($this->globalConfig['showExceptions']) {
@@ -131,25 +131,6 @@ class App
     /**
      * @param $timeStart
      */
-    public function checkAuth($timeStart) {
-        (!isset($_SESSION['auth'])) ? $_SESSION['auth'] = false : null;
-        if ($this->securityConfig['authRequired']) {
-            if ($_SESSION['auth'] !== true) {
-                if ($this->globalConfig['debugBar']) {
-                    $timeStop = microtime(true);
-                    setcookie('BDS_loadingTime', '~' . round(($timeStop - $timeStart), 3) * 1000 . 'ms', time() + 15);
-                }
-                if ($_SERVER['REQUEST_URI'] !== '/login') {
-                    header('Location: login');
-                    exit();
-                }
-            }
-        }
-    }
-
-    /**
-     * @param $timeStart
-     */
     public function insertTimeToDebugBar($timeStart) {
         if ($this->globalConfig['debugBar']) {
             $timeStop = microtime(true);
@@ -164,11 +145,7 @@ class App
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
-        (isset($_GET['errorCode'])) ? \BDSCore\Errors\Errors::returnError($response, $_GET['errorCode']) : null;
-
         $this->startSession();
-        $this->checkPermissions();
-        $this->checkAuth($timeStart);
         $this->pushToDebugBar();
         $response = $this->routerClass->run();
 
