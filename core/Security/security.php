@@ -48,20 +48,9 @@ class Security
         }
     }
 
-    /**
-     * @param int $errorCode
-     */
-    private function returnError(int $errorCode) {
-        try {
-            \BDSCore\Errors\Errors::returnError($errorCode);
-        } catch (\Exception $e) {
-            die('-[ Not allowed -]');
-        }
-    }
-
     public function checkPermissions() {
         if ($this->checkIp()) {
-            $this->returnError(403);
+            \BDSCore\Errors\Errors::returnError(403);
         }
     }
 

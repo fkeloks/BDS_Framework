@@ -164,8 +164,6 @@ class App
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
-        (isset($_GET['errorCode'])) ? \BDSCore\Errors\Errors::returnError($response, $_GET['errorCode']) : null;
-
         $this->startSession();
         $this->checkPermissions();
         $this->checkAuth($timeStart);
