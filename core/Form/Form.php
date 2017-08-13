@@ -58,7 +58,6 @@ class Form
         ($type == 'int') ? $type = 'integer' : null;
         ($type == 'str') ? $type = 'string' : null;
         ($type == 'bool') ? $type = 'boolean' : null;
-        var_dump($item);
         if (gettype($item) != $type) {
             return false;
         } else {
