@@ -81,7 +81,7 @@ class App
 
             $args = func_get_args();
             $className = (is_int($e)) ? 'PHP_Error' : get_class($e);
-            $message = (is_int($e)) ? $args[1] : $e->getMessage();
+            $message = (is_int($e)) ? $args[1] . ' in ' . $args[2] . ':' . $args[3] : $e->getMessage();
 
             $template = new \BDSCore\Template\Twig($this->response);
             if ($this->globalConfig['showExceptions']) {

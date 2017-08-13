@@ -10,7 +10,7 @@ return [
 
     'routes' => [
         'homePage'  => ['get', '/', 'HomeController@index'],
-        'helloPage' => ['get', '/ello/{name:\w+}', 'HelloController@index'],
+        'helloPage' => ['get', '/hello/{name:\w+}', 'HelloController@index'],
         'testPage'  => ['get', '/test', 'TestController@index'],
     ]
 

@@ -189,9 +189,7 @@ class Router
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
 
-                $this->response->getBody()->write(
-                    $this->templateClass->render($this->configRouter['routerConfig']['viewError404'])
-                );
+                $this->templateClass->render($this->configRouter['routerConfig']['viewError404']);
                 $this->response = $this->response->withStatus(404);
 
                 break;
@@ -199,9 +197,7 @@ class Router
 
                 // $allowedMethods = $routeInfo[1];
 
-                $this->response->getBody()->write(
-                    $this->templateClass->render($this->configRouter['routerConfig']['viewError405'])
-                );
+                $this->templateClass->render($this->configRouter['routerConfig']['viewError405']);
                 $this->response = $this->response->withStatus(405);
 
                 break;
