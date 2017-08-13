@@ -11,14 +11,22 @@ class Observer
 
     private static $class;
 
+    /**
+     * @var array
+     */
     private $events = [];
 
     /**
+     * @param bool $newInstance
      * @return Observer
      */
-    public static function getObserver(): Observer {
-        if (!self::$class) {
+    public static function getObserver($newInstance = false): Observer {
+        if ($newInstance) {
             self::$class = new self();
+        } else {
+            if (!self::$class) {
+                self::$class = new self();
+            }
         }
 
         return self::$class;
