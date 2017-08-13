@@ -3,10 +3,10 @@
 namespace App\Controllers;
 
 /**
- * Class testController
+ * Class TestController
  * @package App\Controllers
  */
-class testController extends \BDSCore\BaseController
+class TestController extends \BDSCore\BaseController
 {
 
     public function index() {
