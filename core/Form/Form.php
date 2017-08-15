@@ -147,6 +147,11 @@ class Form
                                     return false;
                                 }
                             }
+                            if (isset($r['in_array'])) {
+                                if (!in_array($method[$c], $r['in_array'])) {
+                                    return false;
+                                }
+                            }
                             if (isset($r['filter'])) {
                                 ($r['filter'] == 'email') ? $r['filter'] = FILTER_VALIDATE_EMAIL : null;
                                 ($r['filter'] == 'url') ? $r['filter'] = FILTER_VALIDATE_URL : null;
@@ -160,7 +165,8 @@ class Form
                                 'max-length',
                                 'value',
                                 'keyIncludedIn',
-                                'filter',
+                                'in_array',
+                                'filter'
                             ]);
                             if (!empty($changes)) {
                                 throw new FormException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
