@@ -15,12 +15,12 @@ return [
     'routerCache' => false,
 
     'twigViews' => 'app/views',
-    'twigCache' => false, //'cache/twig',
+    'twigCache' => 'cache/twig',
 
-    'db_driver'   => 'postgresql',
+    'db_driver'   => 'mysql',
     'db_host'     => 'localhost',
-    'db_name'     => 'framework',
-    'db_username' => 'stephane',
-    'db_password' => 'stephane',
+    'db_name'     => 'BDS_Framework',
+    'db_username' => 'root',
+    'db_password' => '',
 
 ];

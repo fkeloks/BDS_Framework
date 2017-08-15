@@ -9,10 +9,10 @@ return [
     ],
 
     'routes' => [
-        'homePage'  => ['get', '/',                 'homeController@index'],
-        'helloPage' => ['get', '/hello/{name:\w+}', 'helloController@index'],
-        'testPage'  => ['get', '/test',             'testController@index'],
-        'dbPage'    => ['get', '/db',               'dbController@index'],
+        'homePage'  => ['get', '/', 'HomeController@index'],
+        'helloPage' => ['get', '/hello/{name:\w+}', 'HelloController@index'],
+        'testPage'  => ['get', '/test', 'TestController@index'],
+        'dbPage'    => ['get', '/database', 'DbController@index'],
     ]
 
 ];

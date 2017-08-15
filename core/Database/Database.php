@@ -2,6 +2,8 @@
 
 namespace BDSCore\Database;
 
+use BDSCore\Config\Config;
+
 /**
  * Class Database
  * @package BDSCore\Database
@@ -14,18 +16,15 @@ class Database
      */
     private $pdo;
 
-
     /**
      * Database constructor.
      * @param string|null $driver
      * @param string|null $databaseName
      * @throws DatabaseException
      */
-    public function __construct()
-    {
+    public function __construct() {
         return $this->connect();
     }
-
 
     /**
      * @param $driver
@@ -33,42 +32,38 @@ class Database
      * @return \PDO
      * @throws DatabaseException
      */
-    public function connect()
-    {
+    public function connect() {
+        $config = Config::getAllConfig();
         $params = [
-            'driver'   => \BDSCore\Config\Config::getConfig('db_driver'),
-            'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
-            'database' => \BDSCore\Config\Config::getConfig('db_name'),
-            'username' => \BDSCore\Config\Config::getConfig('db_username'),
-            'password' => \BDSCore\Config\Config::getConfig('db_password')
+            'driver'   => $config['db_driver'],
+            'hostname' => $config['db_host'],
+            'database' => $config['db_name'],
+            'username' => $config['db_username'],
+            'password' => $config['db_password']
         ];
 
-        if ($params['driver'] == 'sqlite')
-        {
+        if ($params['driver'] == 'sqlite') {
             if ($params['database'] == null) {
                 throw new DatabaseException('The name of the database must be specified');
             }
 
-            $this->pdo = new \PDO("sqlite:./storage/databases/{$params['database']}.sqlite");
-        }
-        elseif ($params['driver'] == 'mysql')
-        {
+            Config::getDirectoryRoot();
+            $this->pdo = new \PDO(
+                'sqlite:' . Config::getDirectoryRoot("/storage/databases/{$params['database']}.sqlite")
+            );
+        } elseif ($params['driver'] == 'mysql') {
             try {
                 $this->pdo = new \PDO("mysql:host={$params['hostname']};dbname={$params['database']};charset=UTF8", $params['username'], $params['password']);
             } catch (\Exception $e) {
                 throw new DatabaseException($e->getMessage());
             }
-        }
-        elseif ($params['driver'] == 'postgresql')
-        {
+        } elseif ($params['driver'] == 'postgresql') {
             try {
                 $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
             } catch (\DatabaseException $e) {
                 throw new DatabaseException($e->getMessage());
             }
-        }
-        else
-        {
+        } else {
             throw new DatabaseException('Use of an unknown driver name in the \BDSCore\Database() class.');
         }
 
@@ -77,7 +72,6 @@ class Database
 
         return $this->pdo;
     }
-
 
     /**
      * @param string $query
@@ -100,7 +94,6 @@ class Database
         return $query;
     }
 
-
     /**
      * @param string $query
      * @param array $params
@@ -110,7 +103,6 @@ class Database
     public function fetch(string $query, array $params = [], string $entity = null) {
         return $this->query($query, $params, $entity)->fetch();
     }
-
 
     /**
      * @param string $query
@@ -122,7 +114,6 @@ class Database
         return $this->query($query, $params, $entity)->fetchAll();
     }
 
-
     /**
      * @param string $query
      * @param array $params
@@ -132,14 +123,12 @@ class Database
         return $this->query($query, $params, $entity)->fetchColumn();
     }
 
-
     /**
      * @return int
      */
     public function lastInsertId(): int {
         return $this->pdo->lastInsertId();
     }
-
 
     /**
      * @param string|null $tableName
@@ -164,7 +153,6 @@ class Database
             throw new DatabaseException('The name of the table, the name of a column (s), and the values to be inserted are mandatory parameters to execute the query.');
         }
     }
-
 
     /**
      * @param string|null $tableName

@@ -1,4 +1,8 @@
 
+/*
+  BDS Framework, For example only
+*/
+
 CREATE DATABASE framework
 WITH OWNER = stephane
 ENCODING = 'UTF8'
