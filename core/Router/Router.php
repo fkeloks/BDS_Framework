@@ -124,29 +124,45 @@ class Router
     }
 
     /**
-     * @return ResponseInterface
+     * @return void
      */
-    public function run(): ResponseInterface {
+    private function controlPerms() {
+        $prohibitedDirs = [
+            'app',
+            'bin',
+            'cache',
+            'config',
+            'core',
+            'storage',
+            'tests',
+            'vendor',
+        ];
+        $baseDir = substr($this->getBasePath(), 1);
+        $actualDir = explode('/', $baseDir);
+        if (in_array($actualDir[0], $prohibitedDirs)) {
+            \BDSCore\Errors\Errors::returnError($this->response, 403);
+        }
+    }
+
+    /**
+     * @return \FastRoute\Dispatcher
+     */
+    private function configureDispatcher() {
         $routes = $this->configRouter['routes'];
-        $dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $r) use ($routes) {
-
-            if (Config::getSecurityConfig('authRequired')) {
-
-                $this->setPath('login', '/login');
-                $r->get('/login', function () {
-                    \BDSCore\Security\Login::renderLogin($this->response, Config::getSecurityConfig('authPage'));
-                });
-                $r->post('/login', function () {
-                    $this->response = \BDSCore\Security\Login::checkForm($this->response);
-                });
-
-                $this->setPath('logout', '/logout');
-                $r->get('/logout', function () {
-                    $_SESSION['auth'] = false;
-                    $this->response->withHeader('Location', '/');
-                });
-
+        if (Config::getConfig('routerCache')) {
+            $dispatcherClass = \FastRoute\cachedDispatcher::class;
+            $dispatcherOptions = [
+                'cacheFile' => Config::getDirectoryRoot('/cache/router/routesCache.php')
+            ];
+            if (!is_dir(Config::getDirectoryRoot('/cache/router/'))) {
+                mkdir(Config::getDirectoryRoot('/cache/router'));
             }
+        } else {
+            $dispatcherClass = \FastRoute\simpleDispatcher::class;
+            $dispatcherOptions = [];
+        }
+
+        $dispatcher = $dispatcherClass(function (\FastRoute\RouteCollector $r) use ($routes) {
 
             foreach ($routes as $route => $c) {
                 $this->setPath($route, $c[1]);
@@ -154,7 +170,18 @@ class Router
                 $r->addRoute(strtoupper($c[0]), $c[1], [$this->configRouter['routerConfig']['controllersNamespace'] . '\\' . $exp[0], $exp[1]]);
             }
 
-        });
+        }, $dispatcherOptions);
+
+        return $dispatcher;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function run(): ResponseInterface {
+
+        $this->controlPerms();
+        $dispatcher = $this->configureDispatcher();
 
         $httpMethod = $_SERVER['REQUEST_METHOD'];
         $routeInfo = $dispatcher->dispatch($httpMethod, $this->getBasePath());
@@ -162,9 +189,7 @@ class Router
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
 
-                $this->response->getBody()->write(
-                    $this->templateClass->render($this->configRouter['routerConfig']['viewError404'])
-                );
+                $this->templateClass->render($this->configRouter['routerConfig']['viewError404']);
                 $this->response = $this->response->withStatus(404);
 
                 break;
@@ -172,9 +197,7 @@ class Router
 
                 // $allowedMethods = $routeInfo[1];
 
-                $this->response->getBody()->write(
-                    $this->templateClass->render($this->configRouter['routerConfig']['viewError405'])
-                );
+                $this->templateClass->render($this->configRouter['routerConfig']['viewError405']);
                 $this->response = $this->response->withStatus(405);
 
                 break;

@@ -24,7 +24,6 @@ class AppTest extends \PHPUnit\Framework\TestCase {
                 'securityConfig' => \BDSCore\Config\Config::getAllSecurityConfig()
             ],
             [
-                'debugClass' => new \BDSCore\Debug\Debugger(),
                 'securityClass' => new \BDSCore\Security\Security(),
                 'routerClass' => new BDSCore\Router\Router($request, $response)
             ],

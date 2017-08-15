@@ -25,11 +25,6 @@ class App
     /**
      * @var mixed
      */
-    private $debugClass;
-
-    /**
-     * @var mixed
-     */
     private $routerClass;
 
     /**
@@ -52,7 +47,6 @@ class App
         $this->globalConfig = $configs['globalConfig'];
         $this->securityConfig = $configs['securityConfig'];
 
-        $this->debugClass = $classes['debugClass'];
         $this->securityClass = $classes['securityClass'];
         $this->routerClass = $classes['routerClass'];
 
@@ -79,15 +73,15 @@ class App
 
             if ($this->globalConfig['errorLogger']) {
                 $logger = new \Monolog\Logger('BDS_Framework');
-                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('storage/logs/FrameworkLogs.log');
+                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('/storage/logs/FrameworkLogs.log');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::WARNING));
 
                 $logger->warning($e);
             }
-            
+
             $args = func_get_args();
             $className = (is_int($e)) ? 'PHP_Error' : get_class($e);
-            $message = (is_int($e)) ? $args[1] : $e->getMessage();
+            $message = (is_int($e)) ? $args[1] . ' in ' . $args[2] . ':' . $args[3] : $e->getMessage();
 
             $template = new \BDSCore\Template\Twig($this->response);
             if ($this->globalConfig['showExceptions']) {
@@ -128,39 +122,10 @@ class App
         }
     }
 
-    /**
-     * @param $item
-     * @return bool
-     */
-    public function debug($item): bool {
-        \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
-
-        return $this->debugClass->debug($item);
-    }
-
     public function pushToDebugBar() {
         \BDSCore\Debug\debugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
         \BDSCore\Debug\debugBar::pushElement('Locale', $this->globalConfig['locale']);
         \BDSCore\Debug\debugBar::pushElement('Timezone', $this->globalConfig['timezone']);
-    }
-
-    /**
-     * @param $timeStart
-     */
-    public function checkAuth($timeStart) {
-        (!isset($_SESSION['auth'])) ? $_SESSION['auth'] = false : null;
-        if ($this->securityConfig['authRequired']) {
-            if ($_SESSION['auth'] !== true) {
-                if ($this->globalConfig['debugBar']) {
-                    $timeStop = microtime(true);
-                    setcookie('BDS_loadingTime', '~' . round(($timeStop - $timeStart), 3) * 1000 . 'ms', time() + 15);
-                }
-                if ($_SERVER['REQUEST_URI'] !== '/login') {
-                    header('Location: login');
-                    exit();
-                }
-            }
-        }
     }
 
     /**
@@ -180,11 +145,7 @@ class App
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
-        (isset($_GET['errorCode'])) ? \BDSCore\Errors\Errors::returnError($response, $_GET['errorCode']) : null;
-
         $this->startSession();
-        $this->checkPermissions();
-        $this->checkAuth($timeStart);
         $this->pushToDebugBar();
         $response = $this->routerClass->run();
 

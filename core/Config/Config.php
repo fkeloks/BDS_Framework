@@ -31,7 +31,7 @@ class Config
      * @return array
      */
     public static function getAllConfig() {
-        if (isset($_SESSION)) {
+        if (isset($_SESSION['config'])) {
             return $_SESSION['config'];
         } else {
             $config = include(self::$configDirectory . '/config/config.php');
