@@ -14,6 +14,7 @@ class Database
      */
     private $pdo;
 
+
     /**
      * Database constructor.
      * @param string|null $driver
@@ -24,6 +25,7 @@ class Database
     {
         return $this->connect();
     }
+
 
     /**
      * @param $driver
@@ -76,6 +78,7 @@ class Database
         return $this->pdo;
     }
 
+
     /**
      * @param string $query
      * @param array $params
@@ -97,6 +100,7 @@ class Database
         return $query;
     }
 
+
     /**
      * @param string $query
      * @param array $params
@@ -106,6 +110,7 @@ class Database
     public function fetch(string $query, array $params = [], string $entity = null) {
         return $this->query($query, $params, $entity)->fetch();
     }
+
 
     /**
      * @param string $query
@@ -117,6 +122,7 @@ class Database
         return $this->query($query, $params, $entity)->fetchAll();
     }
 
+
     /**
      * @param string $query
      * @param array $params
@@ -126,12 +132,14 @@ class Database
         return $this->query($query, $params, $entity)->fetchColumn();
     }
 
+
     /**
      * @return int
      */
     public function lastInsertId(): int {
         return $this->pdo->lastInsertId();
     }
+
 
     /**
      * @param string|null $tableName
@@ -156,6 +164,7 @@ class Database
             throw new DatabaseException('The name of the table, the name of a column (s), and the values to be inserted are mandatory parameters to execute the query.');
         }
     }
+
 
     /**
      * @param string|null $tableName
