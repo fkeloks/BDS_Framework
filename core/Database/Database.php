@@ -14,22 +14,18 @@ class Database
      */
     private $pdo;
 
+
     /**
      * Database constructor.
      * @param string|null $driver
      * @param string|null $databaseName
      * @throws DatabaseException
      */
-    public function __construct(string $driver = null, string $databaseName = null) {
-        if ($driver == null && $databaseName == null) {
-            throw new DatabaseException('The two parameters of the functions can not both be null');
-        }
-        if (!is_string($driver)) {
-            $driver = \BDSCore\Config\Config::getConfig('db_driver');
-        }
-
-        return $this->connect($driver, $databaseName);
+    public function __construct()
+    {
+        return $this->connect();
     }
+
 
     /**
      * @param $driver
@@ -37,32 +33,51 @@ class Database
      * @return \PDO
      * @throws DatabaseException
      */
-    public function connect($driver, $databaseName) {
-        if ($driver == 'sqlite') {
-            if ($databaseName == null) {
+    public function connect()
+    {
+        $params = [
+            'driver'   => \BDSCore\Config\Config::getConfig('db_driver'),
+            'hostname' => \BDSCore\Config\Config::getConfig('db_host'),
+            'database' => \BDSCore\Config\Config::getConfig('db_name'),
+            'username' => \BDSCore\Config\Config::getConfig('db_username'),
+            'password' => \BDSCore\Config\Config::getConfig('db_password')
+        ];
+
+        if ($params['driver'] == 'sqlite')
+        {
+            if ($params['database'] == null) {
                 throw new DatabaseException('The name of the database must be specified');
             }
-            $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
-        } elseif ($driver == 'mysql') {
-            $params = [
-                'host' => \BDSCore\Config\Config::getConfig('db_host'),
-                'name' => \BDSCore\Config\Config::getConfig('db_name'),
-                'username' => \BDSCore\Config\Config::getConfig('db_username'),
-                'password' => \BDSCore\Config\Config::getConfig('db_password')
-            ];
+
+            $this->pdo = new \PDO("sqlite:./storage/databases/{$params['database']}.sqlite");
+        }
+        elseif ($params['driver'] == 'mysql')
+        {
             try {
-                $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);
+                $this->pdo = new \PDO("mysql:host={$params['hostname']};dbname={$params['database']};charset=UTF8", $params['username'], $params['password']);
             } catch (\Exception $e) {
                 throw new DatabaseException($e->getMessage());
             }
-        } else {
+        }
+        elseif ($params['driver'] == 'postgresql')
+        {
+            try {
+                $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
+            } catch (\DatabaseException $e) {
+                throw new DatabaseException($e->getMessage());
+            }
+        }
+        else
+        {
             throw new DatabaseException('Use of an unknown driver name in the \BDSCore\Database() class.');
         }
+
         $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         return $this->pdo;
     }
+
 
     /**
      * @param string $query
@@ -77,12 +92,14 @@ class Database
             $query = $this->pdo->prepare($query);
             $query->execute($params);
         }
+
         if ($entity) {
             $query->setFetchMode(\PDO::FETCH_CLASS, $entity);
         }
 
         return $query;
     }
+
 
     /**
      * @param string $query
@@ -94,6 +111,7 @@ class Database
         return $this->query($query, $params, $entity)->fetch();
     }
 
+
     /**
      * @param string $query
      * @param array $params
@@ -104,6 +122,7 @@ class Database
         return $this->query($query, $params, $entity)->fetchAll();
     }
 
+
     /**
      * @param string $query
      * @param array $params
@@ -113,12 +132,14 @@ class Database
         return $this->query($query, $params, $entity)->fetchColumn();
     }
 
+
     /**
      * @return int
      */
     public function lastInsertId(): int {
         return $this->pdo->lastInsertId();
     }
+
 
     /**
      * @param string|null $tableName
@@ -143,6 +164,7 @@ class Database
             throw new DatabaseException('The name of the table, the name of a column (s), and the values to be inserted are mandatory parameters to execute the query.');
         }
     }
+
 
     /**
      * @param string|null $tableName

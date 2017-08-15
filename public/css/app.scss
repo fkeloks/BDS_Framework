@@ -22,7 +22,7 @@ body {
     margin-top: 7%;
     color: #3B445B;
     text-align: center;
-    font-size: 2em;
+    font-size: 1.8em;
     height: 250px;
     width: 85%;
     a {
@@ -55,6 +55,13 @@ body {
                 cursor: pointer;
             }
         }
+    }
+}
+
+.block_table {
+    width: 90%;
+    a {
+        text-decoration: none;
     }
 }
 
