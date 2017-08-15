@@ -21,6 +21,6 @@ return [
     'db_host'     => 'localhost',
     'db_name'     => 'BDS_Framework',
     'db_username' => 'root',
-    'db_password' => null,
+    'db_password' => '',
 
 ];

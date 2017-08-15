@@ -2,6 +2,8 @@
 
 namespace BDSCore\Database;
 
+use BDSCore\Config\Config;
+
 /**
  * Class Database
  * @package BDSCore\Database
@@ -20,15 +22,8 @@ class Database
      * @param string|null $databaseName
      * @throws DatabaseException
      */
-    public function __construct(string $driver = null, string $databaseName = null) {
-        if ($driver == null && $databaseName == null) {
-            throw new DatabaseException('The two parameters of the functions can not both be null');
-        }
-        if (!is_string($driver)) {
-            $driver = \BDSCore\Config\Config::getConfig('db_driver');
-        }
-
-        return $this->connect($driver, $databaseName);
+    public function __construct() {
+        return $this->connect();
     }
 
     /**
@@ -37,27 +32,41 @@ class Database
      * @return \PDO
      * @throws DatabaseException
      */
-    public function connect($driver, $databaseName) {
-        if ($driver == 'sqlite') {
-            if ($databaseName == null) {
+    public function connect() {
+        $config = Config::getAllConfig();
+        $params = [
+            'driver'   => $config['db_driver'],
+            'hostname' => $config['db_host'],
+            'database' => $config['db_name'],
+            'username' => $config['db_username'],
+            'password' => $config['db_password']
+        ];
+
+        if ($params['driver'] == 'sqlite') {
+            if ($params['database'] == null) {
                 throw new DatabaseException('The name of the database must be specified');
             }
-            $this->pdo = new \PDO("sqlite:./storage/databases/{$databaseName}.sqlite");
-        } elseif ($driver == 'mysql') {
-            $params = [
-                'host' => \BDSCore\Config\Config::getConfig('db_host'),
-                'name' => \BDSCore\Config\Config::getConfig('db_name'),
-                'username' => \BDSCore\Config\Config::getConfig('db_username'),
-                'password' => \BDSCore\Config\Config::getConfig('db_password')
-            ];
+
+            Config::getDirectoryRoot();
+            $this->pdo = new \PDO(
+                'sqlite:' . Config::getDirectoryRoot("/storage/databases/{$params['database']}.sqlite")
+            );
+        } elseif ($params['driver'] == 'mysql') {
             try {
-                $this->pdo = new \PDO("mysql:host={$params['host']};dbname={$params['name']};charset=UTF8", $params['username'], $params['password']);
+                $this->pdo = new \PDO("mysql:host={$params['hostname']};dbname={$params['database']};charset=UTF8", $params['username'], $params['password']);
             } catch (\Exception $e) {
+                throw new DatabaseException($e->getMessage());
+            }
+        } elseif ($params['driver'] == 'postgresql') {
+            try {
+                $this->pdo = new \PDO("pgsql:dbname={$params['database']};host={$params['hostname']}", $params['username'], $params['password']);
+            } catch (\DatabaseException $e) {
                 throw new DatabaseException($e->getMessage());
             }
         } else {
             throw new DatabaseException('Use of an unknown driver name in the \BDSCore\Database() class.');
         }
+
         $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
@@ -77,6 +86,7 @@ class Database
             $query = $this->pdo->prepare($query);
             $query->execute($params);
         }
+
         if ($entity) {
             $query->setFetchMode(\PDO::FETCH_CLASS, $entity);
         }

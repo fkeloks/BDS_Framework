@@ -5,7 +5,7 @@
  * @return bool
  */
 function debug($item): bool {
-    \BDSCore\Debug\debugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
+    \BDSCore\Debug\DebugBar::pushElement('Debug#' . substr(uniqid(), 8), $item);
 
     return \BDSCore\Debug\Debugger::debug($item);
 }

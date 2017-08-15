@@ -122,4 +122,38 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($form->validate());
     }
 
+    public function testValueInArray() {
+        $array = [
+            'K1' => 'V',
+            'K2' => [
+                'K3'
+            ],
+            'K4'
+        ];
+        $form = new Form('get');
+        $form->configure([
+            'item' => [
+                'in_array' => $array
+            ]
+        ]);
+
+        $_GET['item'] = 'K0';
+        $this->assertFalse($form->validate());
+
+        $_GET['item'] = 'K1';
+        $this->assertFalse($form->validate());
+
+        $_GET['item'] = 'K2';
+        $this->assertFalse($form->validate());
+
+        $_GET['item'] = 'V';
+        $this->assertTrue($form->validate());
+
+        $_GET['item'] = 'K3';
+        $this->assertFalse($form->validate());
+
+        $_GET['item'] = 'K4';
+        $this->assertTrue($form->validate());
+    }
+
 }

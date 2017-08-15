@@ -12,6 +12,7 @@ return [
         'homePage'  => ['get', '/', 'HomeController@index'],
         'helloPage' => ['get', '/hello/{name:\w+}', 'HelloController@index'],
         'testPage'  => ['get', '/test', 'TestController@index'],
+        'dbPage'    => ['get', '/database', 'DbController@index'],
     ]
 
 ];

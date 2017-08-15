@@ -10,11 +10,24 @@ class DebugBar
 {
 
     /**
+     * @var array
+     */
+    private static $items = [];
+
+    /**
      * @param string $key
      * @param $value
+     * @return void
      */
     public static function pushElement(string $key, $value) {
-        $_SESSION['debugBarItems'][$key] = $value;
+        self::$items[$key] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getElements(): array {
+        return self::$items;
     }
 
     /**
@@ -24,12 +37,7 @@ class DebugBar
      */
     public static function insertDebugBar(string $file = null): string {
         if ($file != null) {
-            if (isset($_SESSION['debugBarItems'])) {
-                $elements = $_SESSION['debugBarItems'];
-                $_SESSION['debugBarItems'] = [];
-            } else {
-                throw new \BDSCore\Debug\DebugException('DebugBarItems is not specified in insertDebugBar\'function');
-            }
+            $elements = self::$items;
             $elementsHtml = '';
             foreach ($elements as $el => $e) {
                 (is_array($e) || is_bool($e) || is_int($e)) ? $e = var_export($e, true) : null;
