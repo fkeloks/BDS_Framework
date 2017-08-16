@@ -7,6 +7,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function setUp() {
         \BDSCore\Config\Config::setDirectoryConfig();
+        \BDSCore\Application\App::loadEnv();
     }
 
     public function testGetAllConfig() {

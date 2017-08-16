@@ -10,6 +10,7 @@ class BaseControllerTest extends \PHPUnit\Framework\TestCase
     private $reponse;
 
     public function setUp() {
+        \BDSCore\Application\App::loadEnv();
         $this->request = new \GuzzleHttp\Psr7\ServerRequest('get', '/');
         $this->reponse = new \GuzzleHttp\Psr7\Response();
     }

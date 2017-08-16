@@ -132,7 +132,8 @@ class QuestionHelper extends Helper
      *
      * @return bool|mixed|null|string
      *
-     * @throws RuntimeException In case the fallback is deactivated and the response cannot be hidden
+     * @throws \Exception
+     * @throws \RuntimeException
      */
     private function doAsk(OutputInterface $output, Question $question)
     {
@@ -146,7 +147,7 @@ class QuestionHelper extends Helper
             if ($question->isHidden()) {
                 try {
                     $ret = trim($this->getHiddenResponse($output, $inputStream));
-                } catch (RuntimeException $e) {
+                } catch (\RuntimeException $e) {
                     if (!$question->isHiddenFallback()) {
                         throw $e;
                     }

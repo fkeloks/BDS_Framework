@@ -195,12 +195,7 @@ class Application
 
         if (!$name) {
             $name = $this->defaultCommand;
-            $this->definition->setArguments(array_merge(
-                $this->definition->getArguments(),
-                array(
-                    'command' => new InputArgument('command', InputArgument::OPTIONAL, $this->definition->getArgument('command')->getDescription(), $name),
-                )
-            ));
+            $input = new ArrayInput(array('command' => $this->defaultCommand));
         }
 
         try {
