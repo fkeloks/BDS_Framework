@@ -160,7 +160,6 @@ DB_PASSWORD=');
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
         $this->startSession();
-        self::loadEnv();
         $this->pushToDebugBar();
         $response = $this->routerClass->run();
 
