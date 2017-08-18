@@ -2,11 +2,15 @@
 
 namespace App\Controllers;
 
+/**
+ * Class DbController
+ * @package App\Controllers
+ */
 class DbController extends \BDSCore\BaseController
 {
 
     /**
-     * @var \App\Models\dbModel
+     * @var \App\Models\DbModel
      */
     private $app;
 
