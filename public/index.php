@@ -10,6 +10,7 @@ $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 $response = new \GuzzleHttp\Psr7\Response();
 
 \BDSCore\Config\Config::setDirectoryConfig();
+\BDSCore\Application\App::loadEnv();
 
 $app = new \BDSCore\Application\App(
     [

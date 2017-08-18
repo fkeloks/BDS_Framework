@@ -4,23 +4,26 @@
 
 {% block body %}
 
-    <span class="header"></span>
+    <span class="headerBar"></span>
 
-    <div class="block-center">
-        <h1>Error 500 : Internal server error</h1>
-        <span>
-            {% if(exception == false) %}
-                Unexpected error... <br>
+    <div class="container">
+        <div class="bds-title">
+            <h1>Error 500 : Internal server error</h1>
+            <br>
+            <span>
+                {% if(exception == false) %}
+                    Unexpected error... <br>
                 An error occurred and your request couldn't be completed. Please try again.
-            {% else %}
-                [ {{ className }} ] <br>
-                {{ exception }}
-            {% endif %}
-        </span>
+                {% else %}
+                    [ {{ className }} ] <br>
+                    {{ exception }}
+                {% endif %}
+            </span>
+        </div>
     </div>
 
-    <footer>
-        <span>BDS Version 1.0 | 2017</span>
+    <footer class="footer">
+        <span class="text-center">BDS Framework | Version 1.0 | 2017</span>
     </footer>
 
 {% endblock %}

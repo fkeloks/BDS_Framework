@@ -102,6 +102,7 @@ class App
             $this->response = $this->response->withStatus(500);
 
             \Http\Response\send($this->response);
+            exit();
         }
     }
 
@@ -116,6 +117,20 @@ class App
         return session_status();
     }
 
+    public static function loadEnv() {
+        $envPath = \BDSCore\Config\Config::getDirectoryRoot('/.env');
+        if (!file_exists($envPath)) {
+            file_put_contents($envPath, '
+DB_DRIVER=mysql
+DB_HOST=localhost
+DB_NAME=BDS_Framework
+DB_USERNAME=root
+DB_PASSWORD=');
+        }
+        $dotenv = new \Dotenv\Dotenv(str_replace('.env', '', $envPath));
+        $dotenv->load();
+    }
+
     public function checkPermissions() {
         if ($this->securityConfig['checkPermissions']) {
             $this->securityClass->checkPermissions();
@@ -123,9 +138,26 @@ class App
     }
 
     public function pushToDebugBar() {
-        \BDSCore\Debug\debugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
-        \BDSCore\Debug\debugBar::pushElement('Locale', $this->globalConfig['locale']);
-        \BDSCore\Debug\debugBar::pushElement('Timezone', $this->globalConfig['timezone']);
+        \BDSCore\Debug\DebugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
+        \BDSCore\Debug\DebugBar::pushElement('Locale', $this->globalConfig['locale']);
+        \BDSCore\Debug\DebugBar::pushElement('Timezone', $this->globalConfig['timezone']);
+    }
+
+    public function configureWhoops() {
+        if ($this->globalConfig['useWhoops']) {
+            $run = new \Whoops\Run;
+            $handler = new \Whoops\Handler\PrettyPageHandler();
+
+            $handler->addDataTable('Framework configuration', array(
+                'Global Config'   => $this->globalConfig,
+                'Security Config' => $this->securityConfig
+            ));
+
+            $handler->setPageTitle('BDS Framework :: Error');
+
+            $run->pushHandler($handler);
+            $run->register();
+        }
     }
 
     /**
@@ -145,6 +177,7 @@ class App
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
+        $this->configureWhoops();
         $this->startSession();
         $this->pushToDebugBar();
         $response = $this->routerClass->run();

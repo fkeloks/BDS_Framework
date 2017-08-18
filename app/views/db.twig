@@ -1,20 +1,26 @@
 {% extends 'globals/default.twig' %}
 
-{% block title %}DB{% endblock %}
+{% block title %}Database example{% endblock %}
 
 {% block body %}
 
-    <div class="block-center">
-        <h1>Test database</h1>
-    </div>
+    <span class="headerBar"></span>
 
-    <div class="block_table">
-        {% for key, bookmark in bookmarks %}
+    <div class="container">
+        <div class="bds-title">
+            <h1>Database example</h1>
 
-            #{{ bookmark.id }} <a href="http://{{ bookmark.url }}">{{ bookmark.nom }}</a>
-            <br/>
+            <hr>
 
-        {% endfor %}
+            <ul class="list-group">
+            {% for key, bookmark in bookmarks %}
+
+                <li class="list-group-item"><a href="http://{{ bookmark.url }}" target="_blank">#{{ bookmark.id }} {{ bookmark.nom }}</a></li>
+                <br/>
+
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 
 {% endblock %}

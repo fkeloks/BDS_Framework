@@ -55,12 +55,12 @@ class BaseController
      */
     public function call(string $className, ...$args) {
         $classList = [
-            'form' => \BDSCore\Form\Form::class,
-            'config' => \BDSCore\Config\Config::class,
+            'form'     => \BDSCore\Form\Form::class,
+            'config'   => \BDSCore\Config\Config::class,
             'database' => \BDSCore\Database\Database::class,
             'observer' => \BDSCore\Observer\Observer::class,
             'debugbar' => \BDSCore\Debug\DebugBar::class,
-            'errors' => \BDSCore\Errors\Errors::class
+            'errors'   => \BDSCore\Errors\Errors::class
         ];
         $className = strtolower($className);
         if (array_key_exists($className, $classList)) {
