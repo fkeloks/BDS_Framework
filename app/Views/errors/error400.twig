@@ -1,0 +1,23 @@
+{% extends 'globals/default.twig' %}
+
+{% block title %}HTTP analysis failed | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <span class="headerBar"></span>
+
+    <div class="container">
+        <div class="bds-title">
+            <h1>Error 400 : HTTP analysis failed</h1>
+            <br>
+            <span>
+                HTTP analysis failed, please try again.
+            </span>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <span class="text-center">BDS Framework | Version 1.0 | 2017</span>
+    </footer>
+
+{% endblock %}
