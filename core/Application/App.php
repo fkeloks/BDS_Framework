@@ -58,9 +58,18 @@ class App
      */
     public function catchException($e) {
         try {
-            $permsCode = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/cache'))), -4);
-            if ($permsCode != '0777') {
+            if (!is_dir(Config::getDirectoryRoot('/cache'))) {
+                mkdir(Config::getDirectoryRoot('/cache'));
+            }
+
+            $permsCodeForCache = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/cache'))), -4);
+            if ($permsCodeForCache != '0777') {
                 die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
+            }
+
+            $permsCodeForStorage = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/storage/logs'))), -4);
+            if ($permsCodeForStorage != '0777') {
+                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 storage/logs");
             }
 
             $phpMajorVersion = PHP_MAJOR_VERSION;
@@ -72,6 +81,10 @@ class App
             require_once(\BDSCore\Config\Config::getDirectoryRoot('/vendor/autoload.php'));
 
             if ($this->globalConfig['errorLogger']) {
+                if (!is_dir(Config::getDirectoryRoot('/storage/logs/'))) {
+                    mkdir(Config::getDirectoryRoot('/storage/logs'));
+                }
+
                 $logger = new \Monolog\Logger('BDS_Framework');
                 $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('/storage/logs/FrameworkLogs.log');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::WARNING));
