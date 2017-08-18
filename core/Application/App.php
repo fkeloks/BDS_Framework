@@ -4,6 +4,7 @@ namespace BDSCore\Application;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use \BDSCore\Config\Config;
 
 /**
  * Class App
@@ -62,12 +63,12 @@ class App
                 mkdir(Config::getDirectoryRoot('/cache'));
             }
 
-            $permsCodeForCache = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/cache'))), -4);
+            $permsCodeForCache = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/cache'))), -4);
             if ($permsCodeForCache != '0777') {
                 die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
             }
 
-            $permsCodeForStorage = substr(sprintf('%o', fileperms(\BDSCore\Config\Config::getDirectoryRoot('/storage/logs'))), -4);
+            $permsCodeForStorage = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/storage/logs'))), -4);
             if ($permsCodeForStorage != '0777') {
                 die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 storage/logs");
             }
@@ -78,7 +79,7 @@ class App
                 die("To work properly, BDS Framework needs at least PHP version 7.0.<br />Current version of PHP: {$phpVersion}");
             }
 
-            require_once(\BDSCore\Config\Config::getDirectoryRoot('/vendor/autoload.php'));
+            require_once(Config::getDirectoryRoot('/vendor/autoload.php'));
 
             if ($this->globalConfig['errorLogger']) {
                 if (!is_dir(Config::getDirectoryRoot('/storage/logs/'))) {
@@ -86,7 +87,7 @@ class App
                 }
 
                 $logger = new \Monolog\Logger('BDS_Framework');
-                $logDirectory = \BDSCore\Config\Config::getDirectoryRoot('/storage/logs/FrameworkLogs.log');
+                $logDirectory = Config::getDirectoryRoot('/storage/logs/FrameworkLogs.log');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($logDirectory, \Monolog\Logger::WARNING));
 
                 $logger->warning($e);
@@ -131,7 +132,7 @@ class App
     }
 
     public static function loadEnv() {
-        $envPath = \BDSCore\Config\Config::getDirectoryRoot('/.env');
+        $envPath = Config::getDirectoryRoot('/.env');
         if (!file_exists($envPath)) {
             file_put_contents($envPath, '
 DB_DRIVER=mysql
