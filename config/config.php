@@ -15,7 +15,7 @@ return [
 
     'routerCache' => false,
 
-    'twigViews' => 'app/views',
+    'twigViews' => 'app/Views',
     'twigCache' => 'cache/twig',
 
     'db_driver'   => $_ENV['DB_DRIVER'],
