@@ -141,6 +141,9 @@ DB_NAME=bds_framework
 DB_USERNAME=root
 DB_PASSWORD=');
         }
+        if (!file_exists($envPath)) {
+            die('The .env file is not present at the root of the framework.<br>Try renaming the .env.example file to .env and reload the page.');
+        }
         $dotenv = new \Dotenv\Dotenv(str_replace('.env', '', $envPath));
         $dotenv->load();
     }
