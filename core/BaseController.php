@@ -6,31 +6,37 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class BaseController
+ * BaseController
+ * Controller de base
+ *
  * @package BDSCore
  */
 class BaseController
 {
 
     /**
-     * @var Template\Twig
+     * @var Template\Twig Twig engine
      */
     private $templateClass;
 
     /**
-     * @var RequestInterface
+     * @var RequestInterface Request
      */
     private $request;
 
     /**
-     * @var ResponseInterface
+     * @var ResponseInterface Response
      */
     private $response;
 
     /**
      * BaseController constructor.
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
+     * Constructeur de la classe
+     *
+     * @param RequestInterface $request Request
+     * @param ResponseInterface $response Response
+     *
+     * @return void
      */
     public function __construct(RequestInterface $request, ResponseInterface $response) {
         $this->request = $request;
@@ -40,17 +46,25 @@ class BaseController
     }
 
     /**
+     * Makes a view via Twig
+     * Rend une vue via Twig
+     *
      * @param string $path
      * @param array $args
-     * @return void
+     *
+     * @return ResponseInterface Response
      */
-    public function render(string $path, array $args = []) {
-        $this->templateClass->render($path, $args);
+    public function render(string $path, array $args = []): ResponseInterface {
+        return $this->templateClass->render($path, $args);
     }
 
     /**
-     * @param string $className
-     * @param array ...$args
+     * Simplified call to a framework class
+     * Appel simplifié à une classe du framework
+     *
+     * @param string $className Name of class
+     * @param array ...$args Arguments for constructor
+     *
      * @return bool|object
      */
     public function call(string $className, ...$args) {
@@ -78,7 +92,11 @@ class BaseController
     }
 
     /**
-     * @param string $item
+     * Returns a configuration element resulting from the global configuration of the framework
+     * Retourne un élement de configuration issue de la configuration globale du framework
+     *
+     * @param string $item Element
+     *
      * @return mixed
      */
     public function getGlobalConfig(string $item) {
@@ -86,7 +104,11 @@ class BaseController
     }
 
     /**
-     * @param string $item
+     * Returns a configuration item from the router configuration
+     * Retourne un élement de configuration issue de la configuration du routeur
+     *
+     * @param string $item Element
+     *
      * @return mixed
      */
     public function getRouterConfig(string $item) {
@@ -94,7 +116,11 @@ class BaseController
     }
 
     /**
-     * @param string $item
+     * Returns a configuration item from the framework's security configuration
+     * Retourne un élement de configuration issue de la configuration de la sécurité du framework
+     *
+     * @param string $item Element
+     *
      * @return mixed
      */
     public function getSecurityConfig(string $item) {
@@ -102,7 +128,11 @@ class BaseController
     }
 
     /**
-     * @param string $routeNameOrUrl
+     * Redirects to a route or to a URL
+     * Redirige vers une route ou vers une URL
+     *
+     * @param string $routeNameOrUrl Route name or URL
+     *
      * @return void
      */
     public function redirect(string $routeNameOrUrl) {
@@ -111,6 +141,9 @@ class BaseController
     }
 
     /**
+     * Returns the request
+     * Retourne la requête
+     *
      * @return RequestInterface
      */
     public function getRequest(): RequestInterface {
@@ -118,6 +151,9 @@ class BaseController
     }
 
     /**
+     * Returns the response
+     * Retourne la réponse
+     *
      * @return ResponseInterface
      */
     public function getResponse(): ResponseInterface {
@@ -125,8 +161,12 @@ class BaseController
     }
 
     /**
-     * @param ResponseInterface $response
-     * @return ResponseInterface
+     * Updates the response
+     * Actualise la réponse
+     *
+     * @param ResponseInterface $response Response
+     *
+     * @return ResponseInterface Updated Response
      */
     public function setResponse(ResponseInterface $response): ResponseInterface {
         $this->response = $response;
@@ -135,21 +175,31 @@ class BaseController
     }
 
     /**
-     * @param string $header
-     * @return \string[]
+     * Returns a response header
+     * Retourne un entête de la réponse
+     *
+     * @param string $header Header name
+     *
+     * @return \string[] Header
      */
     public function getHeader(string $header) {
         return $this->response->getHeader($header);
     }
 
     /**
-     * @return \string[][]
+     * Returns the headers of the response
+     * Retourne les entêtes de la réponse
+     *
+     * @return \string[][] Headers
      */
     public function getHeaders() {
         return $this->request->getHeaders();
     }
 
     /**
+     * Returns the current method
+     * Retourne la méthode actuelle
+     *
      * @return string
      */
     public function getMethod(): string {

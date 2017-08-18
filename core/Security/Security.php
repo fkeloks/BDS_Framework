@@ -3,14 +3,20 @@
 namespace BDSCore\Security;
 
 /**
- * Class Security
+ * Class Security: gene part of the security framework
+ * Classe Securité: gène une partie de la securité du framework
+ *
  * @package BDSCore\Security
  */
 class Security
 {
 
     /**
-     * @param string|null $ip
+     * Checks if current IP is banned
+     * Vérifie si l'IP actuelle est bannie
+     *
+     * @param string|null $ip IP Address
+     *
      * @return bool
      */
     public function checkIp(string $ip = null): bool {
@@ -24,7 +30,12 @@ class Security
     }
 
     /**
-     * @param string $ip
+     * Banned an IP
+     * Bannie une IP
+     *
+     * @param string|null $ip IP address
+     *
+     * @return void
      */
     public function banIp(string $ip = null) {
         $ip = (!is_null($ip)) ? $ip : $_SERVER['REMOTE_ADDR'];
@@ -36,7 +47,12 @@ class Security
     }
 
     /**
-     * @param string|null $ip
+     * Removes an IP from the list of banned IPs
+     * Enlève une IP de la liste des IP bannies
+     *
+     * @param string|null $ip IP address
+     *
+     * @return void
      */
     public function allowIp(string $ip = null) {
         $ip = (!is_null($ip)) ? $ip : $_SERVER['REMOTE_ADDR'];
@@ -48,6 +64,12 @@ class Security
         }
     }
 
+    /**
+     * Returns a 403 error if the IP is banned
+     * Retourne une erreur 403 si l'IP est bannie
+     *
+     * @return void
+     */
     public function checkPermissions() {
         if ($this->checkIp()) {
             \BDSCore\Errors\Errors::returnError(403);

@@ -3,14 +3,19 @@
 namespace BDSCore\Security;
 
 /**
- * Class Auth
+ * Auth Class: Control Connection
+ * Classe Auth: contrôle la connexion
+ *
  * @package BDSCore\Security
  */
 class Auth
 {
 
     /**
-     * @return bool
+     * Returns TRUE if the user is logged on, otherwise FALSE
+     * Renvoi TRUE si l'utilisateur est connecté, sinon FALSE
+     *
+     * @return bool True or False
      */
     public static function isLogged(): bool {
         if (!isset($_SESSION['auth'])) {
@@ -21,6 +26,9 @@ class Auth
     }
 
     /**
+     * Connects the user
+     * Connecte l'utilisateur
+     *
      * @return void
      */
     public static function login() {
@@ -28,6 +36,9 @@ class Auth
     }
 
     /**
+     * Disconnect the user
+     * Désonnecte l'utilisateur
+     * 
      * @return void
      */
     public static function logout() {

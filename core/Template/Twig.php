@@ -8,25 +8,29 @@ use \BDSCore\Debug\DebugBar;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Twig
+ * Twig Class: Twig template engine
+ * Classe Twig: moteur de template Twig
+ *
  * @package BDSCore\Template
  */
 class Twig
 {
 
     /**
-     * @var null|\Twig_Environment
+     * @var \Twig_Environment Twig engine
      */
     private $twig = null;
 
     /**
-     * @var ResponseInterface
+     * @var ResponseInterface Response
      */
     private $response;
 
     /**
-     * Template constructor.
-     * @param ResponseInterface $response
+     * Twig constructor.
+     * Constructeur de la classe
+     *
+     * @param ResponseInterface $response Response
      */
     function __construct(ResponseInterface $response) {
         $this->response = $response;
@@ -56,9 +60,13 @@ class Twig
     }
 
     /**
-     * @param string $path
-     * @param array $args
-     * @return ResponseInterface
+     * Makes a view via Twig
+     * Rend une vue via Twig
+     *
+     * @param string $path Path
+     * @param array $args Arguments passeds to view
+     *
+     * @return ResponseInterface Response
      */
     public function render(string $path, array $args = []) {
         DebugBar::pushElement('View', $path);

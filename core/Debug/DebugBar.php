@@ -3,20 +3,27 @@
 namespace BDSCore\Debug;
 
 /**
- * Class DebugBar
+ * DebugBar class: Inserts views on a debugging bar
+ * Classe DebugBar : Insère sur les vues une barre de débogage
+ *
  * @package BDSCore\Debug
  */
 class DebugBar
 {
 
     /**
-     * @var array
+     * @var array Elements that will be inserted into the debugBar
      */
     private static $items = [];
 
     /**
-     * @param string $key
-     * @param $value
+     * Inserts a key and its value into the debugBar
+     * Insère une clef et sa valeur dans la debugBar
+     *
+     * @param string $key Key
+     * @param $value Value
+     *
+     * @return void
      * @throws DebugException
      */
     public static function pushElement(string $key, $value) {
@@ -29,6 +36,9 @@ class DebugBar
     }
 
     /**
+     * Recovers the items currently included in the debugBar
+     * Récupère les élements actuellement inclus en la debugBar
+     *
      * @return array
      */
     public static function getElements(): array {
@@ -36,7 +46,11 @@ class DebugBar
     }
 
     /**
-     * @param string|null $file
+     * Inserts the debugBar into the Twig view if it contains the html tag "<body>"
+     * Insère la debugBar dans la vue Twig si celle-ci comporte la balise html "<body>"
+     *
+     * @param string|null $file Content of view
+     *
      * @return string
      * @throws DebugException
      */

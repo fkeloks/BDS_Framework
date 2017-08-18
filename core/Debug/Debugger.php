@@ -3,19 +3,20 @@
 namespace BDSCore\Debug;
 
 /**
- * Class Debugger
+ * Debugger class: Used to debug a variable and the logger
+ * Classe Debugger : Permet de déboguer une variable et de la logger
+ *
  * @package BDSCore\Debug
  */
 class Debugger
 {
 
     /**
-     * @var string
-     */
-    private static $directoryLogs = './storage/logs/';
-
-    /**
-     * @param $item
+     * Debug a variable and logic if "debug Logger" == TRUE in the global configuration file
+     * Debug une variable et la logue si "debugLogger" == TRUE dans le fichier de configuration global
+     *
+     * @param $item Element to debug
+     *
      * @return bool
      */
     public static function debug($item): bool {

@@ -6,14 +6,16 @@ use BDSCore\Config\Config;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Errors
+ * Error Class: Returns an error in a view
+ * Classe Error : Retourne une erreur dans une vue
+ *
  * @package BDSCore\Errors
  */
 class Errors
 {
 
     /**
-     * @var array
+     * @var array Errors Message
      */
     private static $errors = [
         '400' => 'Failure of HTTP scan.',
@@ -31,10 +33,14 @@ class Errors
     ];
 
     /**
-     * @param ResponseInterface $response
-     * @param int $errorCode
-     * @param bool $sendResponse
-     * @return ResponseInterface
+     * Returns an error in a view if a corresponding view exists
+     * Retourne une erreur dans une vue si une vue correspondante éxiste
+     *
+     * @param ResponseInterface $response Response
+     * @param int $errorCode Error Code
+     * @param bool $sendResponse If TRUE, the response is sent to the browser
+     *
+     * @return ResponseInterface|static
      */
     public static function returnError(ResponseInterface $response, $errorCode = 500, $sendResponse = true) {
 

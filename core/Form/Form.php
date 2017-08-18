@@ -3,30 +3,36 @@
 namespace BDSCore\Form;
 
 /**
- * Class Form
+ * Form class : Checks the matching of a form with a defined configuration
+ * Classe Form : Vérifie la correspondance d'un formulaire avec une configuration définie
+ *
  * @package BDSCore\Form
  */
 class Form
 {
 
     /**
-     * @var string
+     * @var string Name of the current method
      */
     private $method;
 
     /**
-     * @var array
+     * @var array Form configuration
      */
     private $configuration = [];
 
     /**
-     * @var array
+     * @var array Results
      */
     private $results = [];
 
     /**
-     * Form constructor.
-     * @param string|null $method
+     * Constructor of the class
+     * Constructeur de la classe
+     *
+     * @param string $method Method (Example: "get", "post")
+     *
+     * @return void
      * @throws FormException
      */
     public function __construct(string $method = null) {
@@ -38,7 +44,12 @@ class Form
     }
 
     /**
-     * @param array|null $configuration
+     * Defines a configuration for verifying the form
+     * Définit une configuration pour la vérification du formulaire
+     *
+     * @param array $configuration Configuration
+     *
+     * @return void
      * @throws FormException
      */
     public function configure(array $configuration = null) {
@@ -50,8 +61,12 @@ class Form
     }
 
     /**
-     * @param $item
-     * @param string $type
+     * Checks the type of a variable
+     * Vérifie le type d'une variable
+     *
+     * @param $item Element
+     * @param string $type Type
+     *
      * @return bool
      */
     private function checkType($item, string $type): bool {
@@ -66,13 +81,16 @@ class Form
     }
 
     /**
-     * @param string $element
-     * @param array $method
-     * @param string $item
-     * @param array $configuration
+     * Checks the length of a string
+     * Vérifie la longueur d'une chaine de caractère
+     *
+     * @param string $element Element
+     * @param array $method Method
+     * @param array $configuration Configuration
+     *
      * @return bool
      */
-    private function checkLength(string $element, array $method, string $item, array $configuration): bool {
+    private function checkLength(string $element, array $method, array $configuration): bool {
         if (isset($configuration['min-length'])) {
             if (strlen($method[$element]) < $configuration['min-length']) {
                 return false;
@@ -88,25 +106,32 @@ class Form
     }
 
     /**
-     * @param string $method
-     * @return string
+     * Converts the name of the method to a string and then returns the corresponding data
+     * Convertit le nom de la méthode en chaine de caractère puis renvoi les données correspondantes
+     *
+     * @param string $method Name of method
+     *
+     * @return mixed Datas
      * @throws FormException
      */
     private function convertAndGetMethod(string $method) {
         $method = strtolower($method);
         if ($this->method == 'get') {
-            $method = $_GET;
+            $methodData = $_GET;
         } elseif ($this->method == 'post') {
-            $method = $_POST;
+            $methodData = $_POST;
         } else {
             throw new FormException('The form method is invalid or unsupported.');
         }
 
-        return $method;
+        return $methodData;
     }
 
     /**
-     * @return bool
+     * Checks the form with the defined configuration
+     * Vérifie le formulaire avec la configuration définie
+     *
+     * @return bool TRUE if ok
      * @throws FormException
      */
     public function validate(): bool {
@@ -133,7 +158,7 @@ class Form
                                 }
                             }
                             if (isset($r['min-length']) || isset($r['max-length'])) {
-                                if (!$this->checkLength($c, $method, $method[$c], $r)) {
+                                if (!$this->checkLength($c, $method, $r)) {
                                     return false;
                                 }
                             }
@@ -187,7 +212,11 @@ class Form
     }
 
     /**
-     * @param bool $convertHtmlSpecialChars
+     * Returns the results of the form. Variables are escaped if $convertHtmlSpecialChars is TRUE
+     * Retourne les résultats du formulaire. Les variables sont échapées si $convertHtmlSpecialChars est TRUE
+     *
+     * @param bool $convertHtmlSpecialChars Results escaped ? Default is TRUE
+     *
      * @return array
      */
     public function getResults($convertHtmlSpecialChars = true): array {
