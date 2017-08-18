@@ -65,12 +65,12 @@ class App
 
             $permsCodeForCache = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/cache'))), -4);
             if ($permsCodeForCache != '0777') {
-                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 cache/");
+                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForCache}<br />Example: sudo chmod -R 0777 cache/");
             }
 
             $permsCodeForStorage = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/storage/logs'))), -4);
             if ($permsCodeForStorage != '0777') {
-                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCode}<br />Example: sudo chmod -R 0777 storage/logs");
+                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForStorage}<br />Example: sudo chmod -R 0777 storage/logs");
             }
 
             $phpMajorVersion = PHP_MAJOR_VERSION;
