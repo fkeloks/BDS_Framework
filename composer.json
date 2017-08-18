@@ -15,7 +15,7 @@
         "sort-packages": true
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
+    "prefer-stable": false,
     "require": {
         "php": "^7.0 || ^7.1",
         "filp/whoops": "^2.1",
