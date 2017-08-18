@@ -102,6 +102,7 @@ class App
             $this->response = $this->response->withStatus(500);
 
             \Http\Response\send($this->response);
+            exit();
         }
     }
 
@@ -142,6 +143,23 @@ DB_PASSWORD=');
         \BDSCore\Debug\debugBar::pushElement('Timezone', $this->globalConfig['timezone']);
     }
 
+    public function configureWhoops() {
+        if ($this->globalConfig['useWhoops']) {
+            $run = new \Whoops\Run;
+            $handler = new \Whoops\Handler\PrettyPageHandler();
+
+            $handler->addDataTable('Framework configuration', array(
+                'Global Config'   => $this->globalConfig,
+                'Security Config' => $this->securityConfig
+            ));
+
+            $handler->setPageTitle('BDS Framework :: Error');
+
+            $run->pushHandler($handler);
+            $run->register();
+        }
+    }
+
     /**
      * @param $timeStart
      */
@@ -159,6 +177,7 @@ DB_PASSWORD=');
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {
+        $this->configureWhoops();
         $this->startSession();
         $this->pushToDebugBar();
         $response = $this->routerClass->run();

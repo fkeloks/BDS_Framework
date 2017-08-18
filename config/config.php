@@ -7,6 +7,7 @@ return [
     'showDebug'   => false,
 
     'errorLogger'    => true,
+    'useWhoops'      => false,
     'showExceptions' => true,
 
     'timezone' => 'Europe/Paris',

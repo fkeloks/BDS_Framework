@@ -12,7 +12,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllConfig() {
         $config = Config::getAllConfig();
-        $this->assertEquals(15, count($config));
+        $this->assertEquals(16, count($config));
         $this->assertInternalType('array', $config);
     }
 
