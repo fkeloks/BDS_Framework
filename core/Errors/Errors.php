@@ -38,7 +38,7 @@ class Errors
      */
     public static function returnError(ResponseInterface $response, $errorCode = 500, $sendResponse = true) {
 
-        if (file_exists(Config::getDirectoryRoot('/app/views//errors/error' . $errorCode . '.twig'))) {
+        if (file_exists(Config::getDirectoryRoot('/app/views/errors/error' . $errorCode . '.twig'))) {
             $template = new \BDSCore\Template\Twig($response);
             $response = $template->render('errors/error' . $errorCode . '.twig');
         } else {
