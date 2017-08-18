@@ -138,9 +138,9 @@ DB_PASSWORD=');
     }
 
     public function pushToDebugBar() {
-        \BDSCore\Debug\debugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
-        \BDSCore\Debug\debugBar::pushElement('Locale', $this->globalConfig['locale']);
-        \BDSCore\Debug\debugBar::pushElement('Timezone', $this->globalConfig['timezone']);
+        \BDSCore\Debug\DebugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
+        \BDSCore\Debug\DebugBar::pushElement('Locale', $this->globalConfig['locale']);
+        \BDSCore\Debug\DebugBar::pushElement('Timezone', $this->globalConfig['timezone']);
     }
 
     public function configureWhoops() {
