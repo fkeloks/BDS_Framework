@@ -3,14 +3,25 @@
 namespace BDSCore\Config;
 
 /**
- * Class Config
+ * Managing framework configuration files
+ * Gestion des fichiers de configuration du framework
+ *
  * @package BDSCore\Config
  */
 class Config
 {
 
+    /**
+     * @var string Directory path for config
+     */
     private static $configDirectory;
 
+    /**
+     * Defines the root directory of the framework
+     * Définit le repertoire racine du framework
+     *
+     * @return void
+     */
     public static function setDirectoryConfig() {
         if (is_dir('../config')) {
             self::$configDirectory = '..';
@@ -20,7 +31,11 @@ class Config
     }
 
     /**
+     * Retrieves the root directory of the framework
+     * Récupère le repertoire racine du framework
+     *
      * @param string $directory
+     *
      * @return string
      */
     public static function getDirectoryRoot(string $directory): string {
@@ -28,9 +43,13 @@ class Config
     }
 
     /**
+     * Recovers the global configuration of the framework
+     * Récupère la configuration globale du framework
+     *
      * @return array
+     * @throws ConfigException
      */
-    public static function getAllConfig() {
+    public static function getAllConfig(): array {
         if (isset($_SESSION['config'])) {
             return $_SESSION['config'];
         } else {
@@ -45,7 +64,11 @@ class Config
     }
 
     /**
-     * @param string|null $element
+     * Recovers an element of the global configuration of the framework
+     * Récupère un élement de la configuration globale du framework
+     *
+     * @param string|null $element Element to recover
+     *
      * @return mixed
      * @throws ConfigException
      */
@@ -72,6 +95,9 @@ class Config
     }
 
     /**
+     * Retrieves the router configuration
+     * Récupère la configuration du router
+     *
      * @return array
      * @throws ConfigException
      */
@@ -85,7 +111,12 @@ class Config
     }
 
     /**
-     * @param string|null $element
+     * Retrieves an item from the router configuration
+     * Récupère un élement de la configuration du router
+     *
+     * @param string|null $element Element to recover
+     *
+     * @return mixed
      * @throws ConfigException
      */
     public static function getRouterConfig(string $element = null) {
@@ -103,6 +134,9 @@ class Config
     }
 
     /**
+     * Retrieves security configuration
+     * Récupère la configuration de la sécurité
+     *
      * @return array
      * @throws ConfigException
      */
@@ -116,7 +150,12 @@ class Config
     }
 
     /**
-     * @param string|null $element
+     * Recovers an item from the security configuration
+     * Récupère un élement de la configuration de la sécurité
+     *
+     * @param string|null $element Element to recover
+     *
+     * @return mixed
      * @throws ConfigException
      */
     public static function getSecurityConfig(string $element = null) {

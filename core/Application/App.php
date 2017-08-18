@@ -14,34 +14,36 @@ class App
 {
 
     /**
-     * @var array
+     * @var array|mixed Global configuration
      */
     private $globalConfig = [];
 
     /**
-     * @var array
+     * @var array|mixed Security configuration
      */
     private $securityConfig = [];
 
     /**
-     * @var mixed
+     * @var mixed Instance of router class
      */
     private $routerClass;
 
     /**
-     * @var mixed
+     * @var mixed Instance of security class
      */
     private $securityClass;
 
     /**
-     * @var ResponseInterface
+     * @var ResponseInterface Response
      */
     private $response;
 
     /**
-     * App constructor.
-     * @param array $configs
-     * @param array $classes
+     * Constructor of the class
+     * Constructeur de la classe
+     *
+     * @param array $configs Framework configuration
+     * @param array $classes Framework classes
      * @param ResponseInterface $response
      */
     public function __construct(array $configs, array $classes, ResponseInterface $response) {
@@ -55,7 +57,12 @@ class App
     }
 
     /**
-     * @param $e
+     * Function called in the event of an error or exception thrown.
+     * Fonction appelée en cas d'erreur ou de levée d'exception.
+     *
+     * @param $e Exception or error
+     *
+     * @return void
      */
     public function catchException($e) {
         try {
@@ -63,14 +70,14 @@ class App
                 mkdir(Config::getDirectoryRoot('/cache'));
             }
 
-            $permsCodeForCache = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/cache'))), -4);
-            if ($permsCodeForCache != '0777') {
-                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForCache}<br />Example: sudo chmod -R 0777 cache/");
+            $isOkCache = is_writable(Config::getDirectoryRoot('/cache'));
+            if (!$isOkCache) {
+                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Example: sudo chmod -R 0777 cache/");
             }
 
-            $permsCodeForStorage = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/storage/logs'))), -4);
-            if ($permsCodeForStorage != '0777') {
-                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForStorage}<br />Example: sudo chmod -R 0777 storage/logs");
+            $isOkLogs = is_writable(Config::getDirectoryRoot('/storage/logs'));
+            if (!$isOkLogs) {
+                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Example: sudo chmod -R 0777 storage/logs");
             }
 
             $phpMajorVersion = PHP_MAJOR_VERSION;
@@ -121,6 +128,9 @@ class App
     }
 
     /**
+     * Starting the PHP session
+     * Lancement de la session PHP
+     *
      * @return int
      */
     public function startSession(): int {
@@ -131,32 +141,59 @@ class App
         return session_status();
     }
 
+    /**
+     * Loading the .env file into the $ _ENV variable
+     * Chargement du fichier .env dans la variable $_ENV
+     *
+     * @return void
+     */
     public static function loadEnv() {
         $envPath = Config::getDirectoryRoot('/.env');
         if (!file_exists($envPath)) {
             file_put_contents($envPath, '
 DB_DRIVER=mysql
 DB_HOST=localhost
-DB_NAME=BDS_Framework
+DB_NAME=bds_framework
 DB_USERNAME=root
 DB_PASSWORD=');
+        }
+        if (!file_exists($envPath)) {
+            die('The .env file is not present at the root of the framework.<br>Try renaming the .env.example file to .env and reload the page.');
         }
         $dotenv = new \Dotenv\Dotenv(str_replace('.env', '', $envPath));
         $dotenv->load();
     }
 
+    /**
+     * Checks the permissions configured in the security configuration. (Checks the IP in particular)
+     * Vérifie les permissions configurée dans la configuration de la sécurité. (Vérifie les IP notamment)
+     *
+     * @return void
+     */
     public function checkPermissions() {
         if ($this->securityConfig['checkPermissions']) {
             $this->securityClass->checkPermissions();
         }
     }
 
+    /**
+     * Inserting some elements of the configuration file for quick access via the debugBar
+     * Insertion de quelques élements du fichier de configuration pour un accès rapide via la debugBar
+     *
+     * @return void
+     */
     public function pushToDebugBar() {
         \BDSCore\Debug\DebugBar::pushElement('showExceptions', ($this->globalConfig['showExceptions']) ? 'true' : 'false');
         \BDSCore\Debug\DebugBar::pushElement('Locale', $this->globalConfig['locale']);
         \BDSCore\Debug\DebugBar::pushElement('Timezone', $this->globalConfig['timezone']);
     }
 
+    /**
+     * Configuring the Whoops library if it is enabled in the global configuration file
+     * Configuration de la librairie Whoops si celle-ci est activée dans le fichier de configuration global
+     *
+     * @return void
+     */
     public function configureWhoops() {
         if ($this->globalConfig['useWhoops']) {
             $run = new \Whoops\Run;
@@ -175,7 +212,10 @@ DB_PASSWORD=');
     }
 
     /**
-     * @param $timeStart
+     * Inserts the execution time of the PHP script into the debugBar
+     * Insère le temps d'exécution du script PHP dans la debugBar
+     *
+     * @param $timeStart First time capture
      */
     public function insertTimeToDebugBar($timeStart) {
         if ($this->globalConfig['debugBar']) {
@@ -185,9 +225,13 @@ DB_PASSWORD=');
     }
 
     /**
+     * Launches the application with the functions defined above
+     * Lance l'application avec les fonctions définies ci-dessus
+     *
      * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @param $timeStart
+     * @param $timeStart First time capture
+     *
      * @return void
      */
     public function run(RequestInterface $request, ResponseInterface $response, $timeStart) {

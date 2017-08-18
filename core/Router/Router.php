@@ -7,43 +7,45 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Router
+ * Router: Manages the framework's url
+ * Routeur : Gère les url du framework
+ *
  * @package BDSCore\Router
  */
 class Router
 {
 
     /**
-     * @var \Bramus\Router\Router
-     */
-    private $routerClass;
-    /**
-     * @var mixed
+     * @var array Router configuration
      */
     private $configRouter;
+
     /**
-     * @var Template
+     * @var \BDSCore\Template\Twig Twig engine
      */
     private $templateClass;
+
     /**
-     * @var array
+     * @var array Routes
      */
     private static $paths = [];
 
     /**
-     * @var RequestInterface
+     * @var RequestInterface Request
      */
     private $request;
 
     /**
-     * @var ResponseInterface
+     * @var ResponseInterface Response
      */
     private $response;
 
     /**
      * Router constructor.
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
+     * Constructeur du routeur
+     *
+     * @param RequestInterface $request Request
+     * @param ResponseInterface $response Response
      */
     public function __construct(RequestInterface $request, ResponseInterface $response) {
         $this->request = $request;
@@ -54,17 +56,26 @@ class Router
     }
 
     /**
-     * @param string $routeName
-     * @param string $path
+     * Defines a route
+     * Définit une route
+     *
+     * @param string $routeName Name of route
+     * @param string $path Url of route
+     *
+     * @return void
      */
     private function setPath(string $routeName, string $path) {
         $this::$paths[$routeName] = $path;
     }
 
     /**
-     * @param string|null $routeName
-     * @param array $params
-     * @return string
+     * Returns the access url of a route
+     * Retourne l'url d'accès d'une route
+     *
+     * @param string|null $routeName Route name
+     * @param array $params Parameters
+     *
+     * @return string Path
      */
     public static function getPath(string $routeName = null, array $params = []): string {
         if ($routeName == null) {
@@ -87,8 +98,12 @@ class Router
     }
 
     /**
-     * @param $method
-     * @param array $args
+     * Re-orders a parameter array for run ()
+     * Ré-ordonne un tableau de paramètres pour la fonction run()
+     *
+     * @param $method Method
+     * @param array $args Arguments
+     *
      * @return array
      */
     private function getArgsByName($method, array $args = array()): array {
@@ -107,7 +122,10 @@ class Router
     }
 
     /**
-     * @return string
+     * Returns the root path of the framework to understand the URL
+     * Retourne le chemin racine du framework pour comprendre l'URL
+     *
+     * @return string Path
      */
     private function getBasePath(): string {
         $basePath = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
@@ -124,6 +142,9 @@ class Router
     }
 
     /**
+     * Returns a 403 error if the url matches a protected folder
+     * Retourne une erreur 403 si l'url correspond à un dossier protegé
+     *
      * @return void
      */
     private function controlPerms() {
@@ -145,7 +166,10 @@ class Router
     }
 
     /**
-     * @return \FastRoute\Dispatcher
+     * Configuring the URL Dispatcher
+     * Configuration du repartisseur d'URL
+     *
+     * @return mixed Dispatcher
      */
     private function configureDispatcher() {
         $routes = $this->configRouter['routes'];
@@ -176,7 +200,10 @@ class Router
     }
 
     /**
-     * @return ResponseInterface
+     * Launching the router, capturing routes, calling to controllers
+     * Lancement du routeur, capture des routes, appels aux controllers
+     *
+     * @return ResponseInterface Response
      */
     public function run(): ResponseInterface {
 
