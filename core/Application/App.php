@@ -63,14 +63,14 @@ class App
                 mkdir(Config::getDirectoryRoot('/cache'));
             }
 
-            $permsCodeForCache = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/cache'))), -4);
-            if ($permsCodeForCache != '0777') {
-                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForCache}<br />Example: sudo chmod -R 0777 cache/");
+            $isOkCache = is_writable(Config::getDirectoryRoot('/cache'));
+            if (!$isOkCache) {
+                die("The access rights to the 'cache/' folder must be granted to the framework.<br />Example: sudo chmod -R 0777 cache/");
             }
 
-            $permsCodeForStorage = substr(sprintf('%o', fileperms(Config::getDirectoryRoot('/storage/logs'))), -4);
-            if ($permsCodeForStorage != '0777') {
-                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Current access rights: {$permsCodeForStorage}<br />Example: sudo chmod -R 0777 storage/logs");
+            $isOkLogs = is_writable(Config::getDirectoryRoot('/storage/logs'));
+            if (!$isOkLogs) {
+                die("The access rights to the 'storage/logs/' folder must be granted to the framework.<br />Example: sudo chmod -R 0777 storage/logs");
             }
 
             $phpMajorVersion = PHP_MAJOR_VERSION;
@@ -137,7 +137,7 @@ class App
             file_put_contents($envPath, '
 DB_DRIVER=mysql
 DB_HOST=localhost
-DB_NAME=BDS_Framework
+DB_NAME=bds_framework
 DB_USERNAME=root
 DB_PASSWORD=');
         }
