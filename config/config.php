@@ -34,13 +34,13 @@ return [
      * If True, errors and exceptions will be captured by the Whoops library
      * Si True, les erreurs et les exceptions seront capturées par la librairie Whoops
      */
-    'useWhoops'      => true,
+    'useWhoops'      => false,
 
     /*
      * If False, the errors and exceptions captured will make a 500 error. (Caution, if Whoops is enabled, the errors will be captured anyway!)
      * Si False, les erreurs et exceptions capturées rendront une erreur 500. (Attention, si Whoops est activé, les erreurs seront capturées quand même!)
      */
-    'showExceptions' => false,
+    'showExceptions' => true,
 
     /*
      * Time zone and main application language

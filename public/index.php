@@ -39,7 +39,7 @@ $app = new \BDSCore\Application\App(
 set_error_handler([$app, 'catchException']);
 set_exception_handler([$app, 'catchException']);
 
-require('../core/Functions/Functions.php');
+require('../core/Helpers/Functions/Functions.php');
 
 /*
  * Launching the application

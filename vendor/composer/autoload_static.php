@@ -59,6 +59,7 @@ class ComposerStaticInitc6232509327751367dcb23547cd78076
         ),
         'B' => 
         array (
+            'BDSHelpers\\' => 11,
             'BDSCore\\' => 8,
             'BDSConsole\\' => 11,
         ),
@@ -131,9 +132,13 @@ class ComposerStaticInitc6232509327751367dcb23547cd78076
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'BDSHelpers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core/Helpers',
+        ),
         'BDSCore\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/core',
+            0 => __DIR__ . '/../..' . '/core/Framework',
         ),
         'BDSConsole\\' => 
         array (

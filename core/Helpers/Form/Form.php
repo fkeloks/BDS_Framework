@@ -1,12 +1,12 @@
 <?php
 
-namespace BDSCore\Form;
+namespace BDSHelpers\Form;
 
 /**
  * Form class : Checks the matching of a form with a defined configuration
  * Classe Form : Vérifie la correspondance d'un formulaire avec une configuration définie
  *
- * @package BDSCore\Form
+ * @package BDSHelpers\Form
  */
 class Form
 {

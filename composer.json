@@ -37,7 +37,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "BDSCore\\": "core/",
+            "BDSCore\\": "core/Framework",
+            "BDSHelpers\\": "core/Helpers",
             "BDSConsole\\": "bin/commands"
         }
     }
