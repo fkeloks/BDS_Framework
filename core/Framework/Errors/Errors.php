@@ -59,7 +59,7 @@ class Errors
         $response = $response->withStatus($errorCode);
 
         if ($sendResponse) {
-            \Http\Response\send($response);
+            \BDSCore\Application\App::send($response);
             exit();
         } else {
             return $response;
