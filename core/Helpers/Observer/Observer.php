@@ -1,12 +1,12 @@
 <?php
 
-namespace BDSCore\Observer;
+namespace BDSHelpers\Observer;
 
 /**
  * Class Observer : Event manager
  * Classe Observer : Gestionnaire d'événement
  *
- * @package BDSCore\Observer
+ * @package BDSHelpers\Observer
  */
 class Observer
 {

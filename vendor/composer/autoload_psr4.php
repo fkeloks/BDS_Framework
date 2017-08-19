@@ -21,7 +21,8 @@ return array(
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
-    'BDSCore\\' => array($baseDir . '/core'),
+    'BDSHelpers\\' => array($baseDir . '/core/Helpers'),
+    'BDSCore\\' => array($baseDir . '/core/Framework'),
     'BDSConsole\\' => array($baseDir . '/bin/commands'),
     'App\\' => array($baseDir . '/app'),
 );

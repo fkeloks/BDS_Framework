@@ -1,6 +1,6 @@
 <?php
 
-use \BDSCore\Observer\Observer;
+use \BDSHelpers\Observer\Observer;
 
 class ObserverTest extends \PHPUnit\Framework\TestCase
 {

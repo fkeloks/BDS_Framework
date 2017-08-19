@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore\Form;
+namespace BDSHelpers\Form;
 
 /**
  * Class FormException
- * @package BDSCore\Form
+ * @package BDSHelpers\Form
  */
 class FormException extends \Exception
 {

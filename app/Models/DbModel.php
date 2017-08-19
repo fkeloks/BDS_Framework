@@ -10,7 +10,7 @@ class DbModel
 {
 
     /**
-     * @var \BDSCore\Database\Database
+     * @var \BDSHelpers\Database\Database
      */
     private $database;
 
@@ -18,7 +18,7 @@ class DbModel
      * DbModel constructor.
      */
     public function __construct() {
-        $this->database = new \BDSCore\Database\Database();
+        $this->database = new \BDSHelpers\Database\Database();
     }
 
     /**

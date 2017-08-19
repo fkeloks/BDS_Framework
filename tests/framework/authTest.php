@@ -1,6 +1,6 @@
 <?php
 
-use \BDSCore\Security\Auth;
+use \BDSHelpers\Auth\Auth;
 
 class AuthTest extends \PHPUnit\Framework\TestCase
 {

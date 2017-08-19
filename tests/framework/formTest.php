@@ -1,6 +1,6 @@
 <?php
 
-use \BDSCore\Form\Form;
+use \BDSHelpers\Form\Form;
 
 class FormTest extends \PHPUnit\Framework\TestCase
 {

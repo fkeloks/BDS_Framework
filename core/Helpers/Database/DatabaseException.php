@@ -1,10 +1,10 @@
 <?php
 
-namespace BDSCore\Database;
+namespace BDSHelpers\Database;
 
 /**
  * Class DatabaseException
- * @package BDSCore\Database
+ * @package BDSHelpers\Database
  */
 class DatabaseException extends \Exception
 {

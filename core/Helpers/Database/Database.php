@@ -1,12 +1,12 @@
 <?php
 
-namespace BDSCore\Database;
+namespace BDSHelpers\Database;
 
 use BDSCore\Config\Config;
 
 /**
  * Class Database
- * @package BDSCore\Database
+ * @package BDSHelpers\Database
  */
 class Database
 {
