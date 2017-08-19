@@ -116,13 +116,13 @@ class App
 
             $this->response = $this->response->withStatus(500);
 
-            \Http\Response\send($this->response);
+            self::send($this->response);
             exit();
         } catch (Exception $ex) {
             $this->response->getBody()->write('--[ Error 500 ]--');
             $this->response = $this->response->withStatus(500);
 
-            \Http\Response\send($this->response);
+            self::send($this->response);
             exit();
         }
     }
@@ -225,6 +225,43 @@ DB_PASSWORD=');
     }
 
     /**
+     * Send a response
+     * Envoi uen réponse
+     *
+     * @param ResponseInterface $response
+     *
+     * @return void
+     */
+    public static function send(ResponseInterface $response) {
+        $http_line = sprintf('HTTP/%s %s %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
+
+        $version = $response->getProtocolVersion();
+        $status = $response->getStatusCode();
+        $reason = $response->getReasonPhrase();
+
+        $headerStr = "HTTP/{$version} {$status} {$reason}";
+        header($headerStr, true, $response->getStatusCode());
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header("$name: $value", false);
+            }
+        }
+
+        $stream = $response->getBody();
+
+        ($stream->isSeekable()) ? $stream->rewind() : null;
+
+        while (!$stream->eof()) {
+            echo $stream->read(1024 * 8);
+        }
+    }
+
+    /**
      * Launches the application with the functions defined above
      * Lance l'application avec les fonctions définies ci-dessus
      *
@@ -243,7 +280,7 @@ DB_PASSWORD=');
         \BDSCore\Debug\DebugBar::pushElement('RequestMethod', $request->getMethod());
         $this->insertTimeToDebugBar($timeStart);
 
-        \Http\Response\send($response);
+        self::send($response);
     }
 
 }
