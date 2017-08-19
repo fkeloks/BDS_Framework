@@ -14,8 +14,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "stable",
-    "prefer-stable": false,
     "require": {
         "php": "^7.0 || ^7.1",
         "filp/whoops": "^2.1",
@@ -31,7 +29,7 @@
         "symfony/console": "^3.3"
     },
     "scripts": {
-        "post-install-cmd": [
+        "post-root-package-install": [
             "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "test": "phpunit"
