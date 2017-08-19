@@ -69,6 +69,7 @@ class BaseController
      */
     public function call(string $className, ...$args) {
         $classList = [
+            'auth'     => \BDSHelpers\Auth\Auth::class,
             'form'     => \BDSHelpers\Form\Form::class,
             'config'   => \BDSCore\Config\Config::class,
             'database' => \BDSHelpers\Database\Database::class,

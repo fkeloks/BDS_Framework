@@ -1,12 +1,12 @@
 <?php
 
-namespace BDSCore\Security;
+namespace BDSHelpers\Auth;
 
 /**
  * Auth Class: Control Connection
  * Classe Auth: contrôle la connexion
  *
- * @package BDSCore\Security
+ * @package BDSHelpers\Auth
  */
 class Auth
 {
