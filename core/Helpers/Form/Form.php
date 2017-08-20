@@ -2,6 +2,9 @@
 
 namespace BDSHelpers\Form;
 
+use BDSHelpers\Validator\Validator;
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Form class : Checks the matching of a form with a defined configuration
  * Classe Form : Vérifie la correspondance d'un formulaire avec une configuration définie
@@ -25,6 +28,11 @@ class Form
      * @var array Results
      */
     private $results = [];
+
+    /**
+     * @var ServerRequestInterface Request
+     */
+    private $request;
 
     /**
      * Constructor of the class
@@ -61,51 +69,6 @@ class Form
     }
 
     /**
-     * Checks the type of a variable
-     * Vérifie le type d'une variable
-     *
-     * @param $item Element
-     * @param string $type Type
-     *
-     * @return bool
-     */
-    private function checkType($item, string $type): bool {
-        ($type == 'int') ? $type = 'integer' : null;
-        ($type == 'str') ? $type = 'string' : null;
-        ($type == 'bool') ? $type = 'boolean' : null;
-        if (gettype($item) != $type) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Checks the length of a string
-     * Vérifie la longueur d'une chaine de caractère
-     *
-     * @param string $element Element
-     * @param array $method Method
-     * @param array $configuration Configuration
-     *
-     * @return bool
-     */
-    private function checkLength(string $element, array $method, array $configuration): bool {
-        if (isset($configuration['min-length'])) {
-            if (strlen($method[$element]) < $configuration['min-length']) {
-                return false;
-            }
-        }
-        if (isset($configuration['max-length'])) {
-            if (strlen($method[$element]) > $configuration['max-length']) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Converts the name of the method to a string and then returns the corresponding data
      * Convertit le nom de la méthode en chaine de caractère puis renvoi les données correspondantes
      *
@@ -116,10 +79,12 @@ class Form
      */
     private function convertAndGetMethod(string $method) {
         $method = strtolower($method);
+        $request = $this->request;
+
         if ($this->method == 'get') {
-            $methodData = $_GET;
+            $methodData = $request->getQueryParams();
         } elseif ($this->method == 'post') {
-            $methodData = $_POST;
+            $methodData = $request->getParsedBody();
         } else {
             throw new FormException('The form method is invalid or unsupported.');
         }
@@ -131,76 +96,70 @@ class Form
      * Checks the form with the defined configuration
      * Vérifie le formulaire avec la configuration définie
      *
+     * @param ServerRequestInterface $request Request
+     *
      * @return bool TRUE if ok
      * @throws FormException
      */
-    public function validate(): bool {
+    public function validate(ServerRequestInterface $request): bool {
+        $this->request = $request;
         if (!empty($this->method) && !empty($this->configuration)) {
             $method = $this->convertAndGetMethod($this->method);
-            $i = 0;
+
             foreach ($this->configuration as $c => $r) {
-                ($c === $i) ? $c = $r : null;
-                if (!isset($method[$c])) {
-                    return false;
-                } else {
-                    if ($c == $r) {
-                        $this->results[$c] = $method[$c];
-                    } else {
-                        if (is_string($r)) {
-                            if (!$this->checkType($method[$c], $r)) {
-                                return false;
-                            }
-                            $this->results[$c] = $method[$c];
-                        } elseif (is_array($r)) {
-                            if (isset($r['type'])) {
-                                if (!$this->checkType($method[$c], $r['type'])) {
-                                    return false;
-                                }
-                            }
-                            if (isset($r['min-length']) || isset($r['max-length'])) {
-                                if (!$this->checkLength($c, $method, $r)) {
-                                    return false;
-                                }
-                            }
-                            if (isset($r['value'])) {
-                                if ($method[$c] !== $r['value']) {
-                                    return false;
-                                }
-                            }
-                            if (isset($r['keyIncludedIn'])) {
-                                if (!array_key_exists($method[$c], $r['keyIncludedIn'])) {
-                                    return false;
-                                }
-                            }
-                            if (isset($r['in_array'])) {
-                                if (!in_array($method[$c], $r['in_array'])) {
-                                    return false;
-                                }
-                            }
-                            if (isset($r['filter'])) {
-                                ($r['filter'] == 'email') ? $r['filter'] = FILTER_VALIDATE_EMAIL : null;
-                                ($r['filter'] == 'url') ? $r['filter'] = FILTER_VALIDATE_URL : null;
-                                if (!filter_var($method[$c], $r['filter'])) {
-                                    return false;
-                                }
-                            }
-                            $changes = array_diff(array_keys($r), [
-                                'type',
-                                'min-length',
-                                'max-length',
-                                'value',
-                                'keyIncludedIn',
-                                'in_array',
-                                'filter'
-                            ]);
-                            if (!empty($changes)) {
-                                throw new FormException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
-                            }
-                            $this->results[$c] = $method[$c];
+                $item = $method[$c];
+                if (is_string($r)) {
+                    if (!Validator::checkType($item, $r)) {
+                        return false;
+                    }
+                    $this->results[$c] = $item;
+                } elseif (is_array($r)) {
+                    if (isset($r['type'])) {
+                        if (!Validator::checkType($item, $r['type'])) {
+                            return false;
                         }
                     }
+                    if (isset($r['min-length']) || isset($r['max-length'])) {
+                        $min = (isset($r['min-length'])) ? $r['min-length'] : 0;
+                        $max = (isset($r['max-length'])) ? $r['max-length'] : 100;
+                        if (!Validator::checkLength($item, $min, $max)) {
+                            return false;
+                        }
+                    }
+                    if (isset($r['value'])) {
+                        if ($item !== $r['value']) {
+                            return false;
+                        }
+                    }
+                    if (isset($r['keyIncludedIn'])) {
+                        if (!array_key_exists($item, $r['keyIncludedIn'])) {
+                            return false;
+                        }
+                    }
+                    if (isset($r['in_array'])) {
+                        if (!in_array($item, $r['in_array'])) {
+                            return false;
+                        }
+                    }
+                    if (isset($r['filter'])) {
+                        if (!Validator::checkFilter($item, $r['filter'])) {
+                            return false;
+                        }
+                    }
+                    $changes = array_diff(array_keys($r), [
+                        'type',
+                        'min-length',
+                        'max-length',
+                        'value',
+                        'keyIncludedIn',
+                        'in_array',
+                        'filter'
+                    ]);
+                    if (!empty($changes)) {
+                        throw new FormException('A bad parameter was passed to the instantiation of the Form() class: "' . current($changes) . '".');
+                    }
+                    $this->results[$c] = $item;
                 }
-                $i = $i + 1;
             }
 
             return true;

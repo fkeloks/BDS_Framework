@@ -9,9 +9,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
         \BDSCore\Config\Config::setDirectoryConfig();
     }
 
+    private function getRequest() {
+        return \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+    }
+
     public function testInstanceOfForm() {
         $form = new Form('get');
         $this->assertInstanceOf(Form::class, $form);
+
         $form = new Form('post');
         $this->assertInstanceOf(Form::class, $form);
     }
@@ -19,22 +24,22 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testTypeOfItem() {
         $form = new Form('get');
         $form->configure([
-            'item' => 'string'
+            'item' => 'str'
         ]);
         $_GET['item'] = 123;
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $form->configure([
             'item' => 'int'
         ]);
         $_GET['item'] = 'Bob';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 'Bob';
         $form->configure([
-            'item' => 'string'
+            'item' => 'str'
         ]);
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
     }
 
     public function testValueOfItem() {
@@ -46,13 +51,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $_GET['item'] = 'Yeah';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 123;
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 'Bob';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
     }
 
     public function testMinLengthOfItem() {
@@ -64,13 +69,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $_GET['item'] = 'RandomValue';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
 
         $_GET['item'] = 'Ra';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = '';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
     }
 
     public function testMaxLengthOfItem() {
@@ -82,13 +87,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $_GET['item'] = 'RandomValue';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 'Ra';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
 
         $_GET['item'] = '';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
     }
 
     public function testKeyInItem() {
@@ -107,19 +112,19 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $_GET['item'] = 'K0';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 'K1';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
 
         $_GET['item'] = 'K2';
-        $this->assertTrue($form->validate());
+        $this->assertTrue($form->validate($this->getRequest()));
 
         $_GET['item'] = 'K3';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
 
         $_GET['item'] = 'K4';
-        $this->assertFalse($form->validate());
+        $this->assertFalse($form->validate($this->getRequest()));
     }
 
     public function testValueInArray() {
@@ -130,30 +135,30 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ],
             'K4'
         ];
-        $form = new Form('get');
+        $form = new Form('post');
         $form->configure([
             'item' => [
                 'in_array' => $array
             ]
         ]);
 
-        $_GET['item'] = 'K0';
-        $this->assertFalse($form->validate());
+        $_POST['item'] = 'K0';
+        $this->assertFalse($form->validate($this->getRequest()));
 
-        $_GET['item'] = 'K1';
-        $this->assertFalse($form->validate());
+        $_POST['item'] = 'K1';
+        $this->assertFalse($form->validate($this->getRequest()));
 
-        $_GET['item'] = 'K2';
-        $this->assertFalse($form->validate());
+        $_POST['item'] = 'K2';
+        $this->assertFalse($form->validate($this->getRequest()));
 
-        $_GET['item'] = 'V';
-        $this->assertTrue($form->validate());
+        $_POST['item'] = 'V';
+        $this->assertTrue($form->validate($this->getRequest()));
 
-        $_GET['item'] = 'K3';
-        $this->assertFalse($form->validate());
+        $_POST['item'] = 'K3';
+        $this->assertFalse($form->validate($this->getRequest()));
 
-        $_GET['item'] = 'K4';
-        $this->assertTrue($form->validate());
+        $_POST['item'] = 'K4';
+        $this->assertTrue($form->validate($this->getRequest()));
     }
 
 }
