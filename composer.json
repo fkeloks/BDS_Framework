@@ -4,6 +4,7 @@
     "type": "project",
     "keywords": ["framework", "bds"],
     "license": "MIT",
+    "version": "1.0",
     "authors": [
         {
             "name": "fkeloks",
@@ -40,6 +41,11 @@
             "BDSCore\\": "core/Framework",
             "BDSHelpers\\": "core/Helpers",
             "BDSConsole\\": "bin/commands"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-master"
         }
     }
 }
